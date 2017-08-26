@@ -1,2 +1,41 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<%= form_tag(get_any_items_home_index_path, method: "post") do %>
+  <%= label_tag(:count_item, "Count item:") %>
+  <%= text_field_tag(:count_item) %>
+  <p>
+  <%= label_tag(:from_price, "From price:") %>
+  <%= text_field_tag(:from_price, value = 10) %>
+  <p>
+  <%= label_tag(:to_price, "To price:") %>
+  <%= text_field_tag(:to_price, value = 50) %>
+  <p>
+  <%= label_tag(:coeff_val, "Coeff val:") %>
+  <%= text_field_tag(:coeff_val, value = 80) %>
+  <p>
+  <%= submit_tag("Get_any_items") %>
+<% end %>
+
+<p>
+<h1>Listing Items</h1>
+<table>
+  <thead>
+    <tr>
+      <th>class_id</th>
+      <th>instance_id</th>
+      <th>hash_name</th>
+      <th>price</th>
+      <th>link</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= item.class_id %></td>
+        <td><%= item.instance_id %></td>
+        <td><%= item.hash_name %></td>
+        <td><%= item.price %></td>
+        <td><%= link_to 'Link', item.link %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
