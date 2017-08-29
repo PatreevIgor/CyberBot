@@ -3,6 +3,10 @@ class HomeController < ApplicationController
     @items = Item.all
   end
 
+  def inventary
+    @items = Item.where(status: 'trade_off')
+  end
+
   def get_any_items
     count_items_database = Item.count
     count_items_params =   params[:count_item].to_i
@@ -11,6 +15,9 @@ class HomeController < ApplicationController
     break if count_items_database >= count_items_params
     end 
     redirect_to action: 'index'
+  end
+
+  def update_inventary
   end
 
   private
