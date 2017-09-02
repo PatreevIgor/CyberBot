@@ -16,7 +16,7 @@ module CheckItems
   end
 
   def last_50_purchases
-    send_request('https://market.dota2.net/history/json/')
+    Connection.send_request('https://market.dota2.net/history/json/')
   end
 
   def define_best_item(params)
@@ -42,13 +42,6 @@ module CheckItems
   end
 
   private
-
-  def send_request(url)
-    uri           = URI.parse(url)
-    response_json = Net::HTTP.get_response(uri)
-
-    JSON.parse(response_json.body)
-  end
 
   def filter_conditions?(params)
     if params[:current_price].to_f > min_price(params) &&
@@ -84,7 +77,7 @@ module CheckItems
   def get_hash_min_and_max_prices(params)
     url = "https://market.dota2.net/api/ItemHistory/#{params[:class_id].to_s}"\
           "_#{params[:instance_id].to_s}/?key=#{params[:secret_key]}"
-    response = send_request(url)
+    response = Connection.send_request(url)
 
     create_hash_min_max_prices(response)
   end
