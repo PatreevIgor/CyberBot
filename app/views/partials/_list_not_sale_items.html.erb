@@ -1,0 +1,26 @@
+<h1>Listing not sale Items</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ui_id</th>
+      <th>i_market_hash_name</th>
+      <th>i_market_name</th>
+      <th>i_name_color</th>
+      <th>i_rarity</th>
+      <th>status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= item.ui_id %></td>
+        <td><%= item.i_market_hash_name %></td>
+        <td><%= item.i_market_name %></td>
+        <td><%= item.i_name_color %></td>
+        <td><%= item.i_rarity %></td>
+        <td><%= item.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

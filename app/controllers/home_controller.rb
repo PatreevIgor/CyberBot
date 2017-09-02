@@ -1,10 +1,18 @@
 class HomeController < ApplicationController
+
+  #actions for pages
   def index
     @items = Item.all
   end
 
   def inventary
-    @items = Item.where(status: 'trade_off')
+    @items = Item.where(status: 'not sale')
+  end
+
+
+# actions for buttons
+  def action_update_not_sale_items
+    main_object.update_not_sale_items
   end
 
   def get_any_items
@@ -15,9 +23,6 @@ class HomeController < ApplicationController
     break if count_items_database >= count_items_params
     end 
     redirect_to action: 'index'
-  end
-
-  def update_inventary
   end
 
   private
