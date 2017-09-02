@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829182112) do
+ActiveRecord::Schema.define(version: 20170902081622) do
 
   create_table "items", force: :cascade do |t|
     t.integer "class_id", limit: 16
@@ -22,6 +22,26 @@ ActiveRecord::Schema.define(version: 20170829182112) do
     t.datetime "updated_at", null: false
     t.string "link"
     t.string "status"
+    t.string "ui_id"
+    t.string "i_market_hash_name"
+    t.string "i_market_name"
+    t.string "i_name"
+    t.string "i_name_color"
+    t.string "i_rarity"
+    t.integer "ui_status"
+    t.string "he_name"
+    t.integer "ui_price"
+    t.integer "min_price"
+    t.boolean "ui_price_text"
+    t.boolean "min_price_text"
+    t.string "i_classid"
+    t.string "i_instanceid"
+    t.boolean "ui_new"
+    t.integer "position"
+    t.string "wear"
+    t.integer "tradable"
+    t.float "i_market_price"
+    t.string "i_market_price_text"
   end
 
   create_table "users", force: :cascade do |t|
