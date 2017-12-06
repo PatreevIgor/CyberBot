@@ -1,10 +1,14 @@
 module Inventary
+
+  NOT_SALE_ITEMS_URL    = "https://market.dota2.net/api/GetInv/?key=#{Rails.application.secrets.your_secret_key}".freeze
+  STATUS_NOT_SALE_ITEMS = 'not sale'
+
   def update_not_sale_items
-    Item.all.where(status: 'not sale').delete_all
-    create_inventary_not_sale_items
+    Item.all.where(status: STATUS_NOT_SALE_ITEMS).delete_all
+    create_not_sale_items
   end
 
-  def create_inventary_not_sale_items
+  def create_not_sale_items
     not_sale_items.each do |ok_or_data, items|
       if ok_or_data == 'data'
         items.each do |item_attr|
@@ -28,7 +32,7 @@ module Inventary
                       tradable:            item_attr['tradable'],
                       i_market_price:      item_attr['i_market_price'], 
                       i_market_price_text: item_attr['i_market_price_text'],
-                      status:              'not sale')
+                      status:              STATUS_NOT_SALE_ITEMS)
         end
       end
     end
@@ -37,6 +41,6 @@ module Inventary
   private
 
   def not_sale_items
-    Connection.send_request("https://market.dota2.net/api/GetInv/?key=#{Rails.application.secrets.your_secret_key}")
+    Connection.send_request(NOT_SALE_ITEMS_URL)
   end
 end
