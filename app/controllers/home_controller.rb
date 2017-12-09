@@ -6,13 +6,18 @@ class HomeController < ApplicationController
   end
 
   def inventary
-    @items = Item.where(status: 'not sale')
+    @not_sale_items = Item.where(status: 'not sale')
+    @sale_items     = Item.where(status: 'sale on')
   end
 
 
 # actions for buttons
   def action_update_not_sale_items
     main_object.update_not_sale_items
+  end
+
+  def action_update_sale_items
+    main_object.update_sale_items
   end
 
   def get_any_items

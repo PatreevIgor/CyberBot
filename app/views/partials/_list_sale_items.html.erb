@@ -1,16 +1,18 @@
-<h1>Listing not sale Items</h1>
+<h1>Listing sale Items</h1>
 <table>
   <thead>
     <tr>
       <th>i_name</th>
+      <th>ui_price</th>
       <th>link</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @not_sale_items.each do |item| %>
+    <% @sale_items.each do |item| %>
       <tr>
         <td><%= item.i_name %></td>
+        <td><%= item.ui_price %></td>
         <td><%= link_to 'Link', item.link %></td>
       </tr>
     <% end %>

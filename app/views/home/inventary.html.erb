@@ -3,3 +3,11 @@
 <%= form_tag(action_update_not_sale_items_home_index_path, method: 'post') do %>
   <%= submit_tag('Update_not_sale_items') %>
 <% end %>
+
+<br>
+
+<%= render 'partials/list_sale_items.html' %>
+
+<%= form_tag(action_update_sale_items_home_index_path, method: 'post') do %>
+  <%= submit_tag('Update_sale_items') %>
+<% end %>

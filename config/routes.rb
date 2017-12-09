@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       post :check_50_last_sales
       post :get_any_items
       post :action_update_not_sale_items
+      post :action_update_sale_items
     end
   end
 end
