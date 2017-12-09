@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171209095059) do
+ActiveRecord::Schema.define(version: 20171209133716) do
 
   create_table "items", force: :cascade do |t|
     t.integer "class_id", limit: 16
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20171209095059) do
     t.string "type_new"
     t.integer "offer_live_time"
     t.string "placed"
+    t.float "coef_cur_state"
   end
 
   create_table "users", force: :cascade do |t|
