@@ -1,0 +1,20 @@
+<h1>Main Items</h1>
+<table>
+  <thead>
+    <tr>
+      <th>hash_name</th>
+      <th>price</th>
+      <th>link</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @main_items.each do |item| %>
+      <tr>
+        <td><%= item.hash_name %></td>
+        <td><%= item.price %></td>
+        <td><%= link_to 'Link', item.link %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

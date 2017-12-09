@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       post :get_any_items
       post :action_update_not_sale_items
       post :action_update_sale_items
+      post :action_change_status_new_to_main
     end
   end
 end

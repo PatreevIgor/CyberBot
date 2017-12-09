@@ -3,13 +3,13 @@ class HomeController < ApplicationController
   #actions for pages
   def index
     @new_items = Item.where(status: 'new')
+    @main_items = Item.where(status: 'main')
   end
 
   def inventary
     @not_sale_items = Item.where(status: 'not sale')
     @sale_items     = Item.where(status: 'sale on')
   end
-
 
 # actions for buttons
   def action_update_not_sale_items
@@ -21,13 +21,24 @@ class HomeController < ApplicationController
   end
 
   def get_any_items
-    count_items_database = Item.count
+    count_new_items = Item.where(status: 'new').size
     count_items_params =   params[:count_item].to_i
     loop do
       main_object.check_50_last_sales(params[:from_price], params[:to_price], params[:coeff_val])
-    break if count_items_database >= count_items_params
+    break if count_new_items >= count_items_params
     end 
-    redirect_to action: 'index'
+    render 'home/index'
+  end
+
+  def action_change_status_new_to_main
+    @new_items = Item.where(status: 'new')
+    @main_items = Item.where(status: 'main')
+
+    Item.where(status: 'new').each do |item|
+      item.status = 'main'
+      item.save!
+    end
+    render 'home/index'
   end
 
   private

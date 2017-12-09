@@ -2,7 +2,7 @@ module CheckItems
   STATUS_NEW_ITEMS      = 'new'.freeze
   LAST_50_PURCHASES_URL = 'https://market.dota2.net/history/json/'.freeze
 
-  def check_50_last_sales(from_price = 10, to_price = 50, coeff_val = 80)
+  def check_50_last_sales(from_price, to_price, coeff_val)
     last_50_purchases.each do |item_hash, empty_val|
       sleep(1)
       define_best_item(class_id:             item_hash['classid'],
@@ -54,7 +54,7 @@ module CheckItems
        coefficient_current_state_of_prices(params) > params[:coeff_input_val].to_i &&
        coefficient_profit(best_offer_price(best_buy_offer_url(params[:class_id], params[:instance_id])),
                           best_offer_price(best_sell_offer_url(params[:class_id], params[:instance_id])),
-                          20) == true
+                          1000) == true
       return true
     else
       return false
@@ -72,8 +72,11 @@ module CheckItems
   def coefficient_profit(price_of_buy, price_of_sell, limit)
     if (price_of_sell - price_of_buy) - (price_of_sell/100*10) > 0 &&
        (price_of_sell - price_of_buy) >= limit
+      # puts 'coefficient_profit - true'
+      # puts "(price_of_sell - price_of_buy) = #{(price_of_sell - price_of_buy)}"
       return true
     else
+      # puts 'coefficient_profit - false'
       return false
     end
   end
