@@ -2,7 +2,7 @@ class HomeController < ApplicationController
 
   #actions for pages
   def index
-    @items = Item.all
+    @new_items = Item.where(status: 'new')
   end
 
   def inventary

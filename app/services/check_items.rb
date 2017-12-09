@@ -34,13 +34,13 @@ module CheckItems
       puts "Выгодная шмотка. Текушая цена #{params[:current_price].to_f}.
             Мин #{min_price(params)} 
             Макс #{max_price(params)} 
-            Коэф выгоды: #{coefficient_current_state_of_prices(params)} 
+            Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
             IDs:#{params[:class_id]}_#{params[:instance_id]}"
     else 
       puts "Мусор. Текушая цена #{params[:current_price].to_f}. 
             Мин #{min_price(params)} 
             Макс #{max_price(params)} 
-            Коэф выгоды: #{coefficient_current_state_of_prices(params)} 
+            Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
             IDs:#{params[:class_id]}_#{params[:instance_id]}"
     end
   end
@@ -51,7 +51,10 @@ module CheckItems
     if params[:current_price].to_f > min_price(params) &&
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
        params[:current_price].to_f < params[:to_price_input_val].to_i &&
-       coefficient_current_state_of_prices(params) > params[:coeff_input_val].to_i
+       coefficient_current_state_of_prices(params) > params[:coeff_input_val].to_i &&
+       coefficient_profit(best_offer_price(best_buy_offer_url(params[:class_id], params[:instance_id])),
+                          best_offer_price(best_sell_offer_url(params[:class_id], params[:instance_id])),
+                          20) == true
       return true
     else
       return false
@@ -66,7 +69,13 @@ module CheckItems
     sprintf("%.2f", coefficient).to_f
   end
 
-  def coefficient_profit
+  def coefficient_profit(price_of_buy, price_of_sell, limit)
+    if (price_of_sell - price_of_buy) - (price_of_sell/100*10) > 0 &&
+       (price_of_sell - price_of_buy) >= limit
+      return true
+    else
+      return false
+    end
   end
 
   def max_price(params)
@@ -100,8 +109,23 @@ module CheckItems
     "https://market.dota2.net/item/#{i_classid}-#{i_instanceid}-#{i_market_hash_name.gsub(' ','+')}/"
   end
 
+  def best_offer_price(url)
+    response = Connection.send_request(url)
+    response['best_offer'].to_i
+  end
+
   def item_history_url(class_id, instance_id)
-    url = "https://market.dota2.net/api/ItemHistory/#{class_id.to_s}"\
-          "_#{instance_id.to_s}/?key=#{Rails.application.secrets.your_secret_key}"
+    url = "https://market.dota2.net/api/ItemHistory/#{class_id.to_s}_#{instance_id.to_s}/?key="\
+          "#{Rails.application.secrets.your_secret_key}"
+  end
+
+  def best_sell_offer_url(class_id, instance_id)
+    "https://market.dota2.net/api/BestSellOffer/#{class_id}_#{instance_id}/?key="\
+    "#{Rails.application.secrets.your_secret_key}"
+  end
+
+  def best_buy_offer_url(class_id, instance_id)
+    "https://market.dota2.net/api/BestBuyOffer/#{class_id}_#{instance_id}/?key="\
+    "#{Rails.application.secrets.your_secret_key}"
   end
 end
