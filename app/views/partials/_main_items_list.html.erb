@@ -5,6 +5,7 @@
       <th>hash_name</th>
       <th>price</th>
       <th>link</th>
+      <th>link_destroy</th>
     </tr>
   </thead>
 
@@ -14,6 +15,7 @@
         <td><%= item.hash_name %></td>
         <td><%= item.price %></td>
         <td><%= link_to 'Link', item.link %></td>
+        <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
