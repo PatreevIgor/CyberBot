@@ -49,6 +49,21 @@ class HomeController < ApplicationController
     main_object.create_requests_for_main_items
   end
 
+  def action_remove_ident_items
+    @new_items = Item.where(status: 'new')
+    @main_items = Item.where(status: 'main')
+    empty_massive = []
+    @main_items.each do |item|
+      if empty_massive.include?(item.link)
+        item.destroy
+      else
+        empty_massive << item.link
+      end
+    end
+    empty_massive = []
+    redirect_back(fallback_location: root_path)
+  end
+
   private
 
   def main_object

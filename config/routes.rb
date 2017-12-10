@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       post :action_update_sale_items
       post :action_change_status_new_to_main
       post :action_create_queries_automatically_buy_item
+      post :action_remove_ident_items
     end
   end
 end
