@@ -1,15 +1,21 @@
-<%= form_tag(get_any_items_home_index_path, method: "post") do %>
-  <%= label_tag(:count_item, "Count item:") %>
-  <%= text_field_tag(:count_item) %>
-  <p>
-  <%= label_tag(:from_price, "From price:") %>
-  <%= text_field_tag(:from_price) %>
-  <p>
-  <%= label_tag(:to_price, "To price:") %>
-  <%= text_field_tag(:to_price) %>
-  <p>
-  <%= label_tag(:coeff_val, "Coefficient current state:") %>
-  <%= text_field_tag(:coeff_val, value = 0) %>
-  <p>
-  <%= submit_tag("Get_any_items") %>
-<% end %>
+<table>
+  <tbody>
+    <%= form_tag(get_any_items_home_index_path, method: "post") do %>
+      <tr>
+        <th><%= label_tag(:count_item, "Count item:") %>
+        <%= text_field_tag(:count_item) %><th>
+
+        <th><%= label_tag(:from_price, "From price:") %>
+        <%= text_field_tag(:from_price) %><th>
+        
+        <th><%= label_tag(:to_price,   "To price:") %>
+        <%= text_field_tag(:to_price) %><th>
+        
+        <th><%= label_tag(:coeff_val,  "Coefficient current state:") %>
+        <%= text_field_tag(:coeff_val) %><th>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<%= submit_tag("Get any items") %>
