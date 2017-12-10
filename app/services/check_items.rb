@@ -4,7 +4,7 @@ module CheckItems
 
   def check_50_last_sales(from_price, to_price, coeff_val)
     last_50_purchases.each do |item_hash, empty_val|
-      sleep(1)
+      # sleep(0.2)
       define_best_item(class_id:             item_hash['classid'],
                        instance_id:          item_hash['instanceid'],
                        current_price:        item_hash['price'],
@@ -34,14 +34,16 @@ module CheckItems
       puts "Выгодная шмотка. Текушая цена #{params[:current_price].to_f}.
             Мин #{min_price(params)} 
             Макс #{max_price(params)} 
-            Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
             IDs:#{params[:class_id]}_#{params[:instance_id]}"
+            # Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
+
     else 
       puts "Мусор. Текушая цена #{params[:current_price].to_f}. 
             Мин #{min_price(params)} 
             Макс #{max_price(params)} 
-            Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
+
             IDs:#{params[:class_id]}_#{params[:instance_id]}"
+            # Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
     end
   end
 
@@ -51,10 +53,10 @@ module CheckItems
     if params[:current_price].to_f > min_price(params) &&
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
        params[:current_price].to_f < params[:to_price_input_val].to_i &&
-       coefficient_current_state_of_prices(params) > params[:coeff_input_val].to_i &&
+       # coefficient_current_state_of_prices(params) > params[:coeff_input_val].to_i &&
        coefficient_profit(best_offer_price(best_buy_offer_url(params[:class_id], params[:instance_id])),
                           best_offer_price(best_sell_offer_url(params[:class_id], params[:instance_id])),
-                          1000) == true
+                          2000) == true
       return true
     else
       return false
