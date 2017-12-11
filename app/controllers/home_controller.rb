@@ -29,7 +29,7 @@ class HomeController < ApplicationController
     end 
     @new_items = Item.where(status: 'new')
     @main_items = Item.where(status: 'main')
-    render 'home/index'
+    redirect_back(fallback_location: root_path)
   end
 
   def action_change_status_new_to_main
@@ -40,7 +40,7 @@ class HomeController < ApplicationController
       item.status = 'main'
       item.save!
     end
-    render 'home/index'
+    redirect_back(fallback_location: root_path)
   end
 
   def action_create_queries_automatically_buy_item

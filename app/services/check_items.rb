@@ -35,13 +35,15 @@ module CheckItems
             Мин #{min_price(params)} 
             Макс #{max_price(params)} 
             # Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
-            IDs:#{params[:class_id]}_#{params[:instance_id]}"
+            IDs:#{params[:class_id]}_#{params[:instance_id]}
+            Найдено #{Item.where(status: 'new').size} новых шмоток!"
     else 
       puts "Мусор. Текушая цена #{params[:current_price].to_f}. 
             Мин #{min_price(params)} 
             Макс #{max_price(params)} 
             Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
-            IDs:#{params[:class_id]}_#{params[:instance_id]}"
+            IDs:#{params[:class_id]}_#{params[:instance_id]}
+            Найдено #{Item.where(status: 'new').size} новых шмоток!"
     end
   end
 
