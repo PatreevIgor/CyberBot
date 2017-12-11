@@ -51,6 +51,7 @@ class HomeController < ApplicationController
   def action_create_queries_automatically_buy_item
     @new_items = Item.where(status: 'new')
     @main_items = Item.where(status: 'main')
+    main_object.delete_old_orders
     main_object.create_requests_for_actually_main_items
   end
 
