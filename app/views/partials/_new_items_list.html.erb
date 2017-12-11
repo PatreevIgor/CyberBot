@@ -1,4 +1,4 @@
-<h1>New Items</h1>
+<h1>New Items (count: <%= @new_items.size %>)</h1>
 <table>
   <thead>
     <tr>
@@ -14,7 +14,7 @@
       <tr>
         <td><%= item.hash_name %></td>
         <td><%= item.price %></td>
-        <td><%= link_to 'Link', item.link %></td>
+        <td><%= link_to 'Link', item.link %>&nbsp;</td>
         <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

@@ -1,4 +1,4 @@
-<h1>Main Items (actually / not_actually / main)  (count: <%= @all_main_items.size %>)</h1>
+<h1>Not Actually main Items list (count: <%= @not_actually_main_items.size %>)</h1>
 <table>
   <thead>
     <tr>
@@ -10,7 +10,7 @@
   </thead>
 
   <tbody>
-    <% @all_main_items.each do |item| %>
+    <% @not_actually_main_items.each do |item| %>
       <tr>
         <td><%= item.hash_name %></td>
         <td><%= item.price %></td>

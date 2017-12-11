@@ -1,6 +1,6 @@
 module CreateOrders
-  def create_requests_for_main_items
-    Item.where(status: 'main').each do |item|
+  def create_requests_for_actually_main_items
+    Item.where(status: 'main_actually').each do |item|
       create_order_item(item.class_id, item.instance_id, order_price(item) + 0001)
     end
   end

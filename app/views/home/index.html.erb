@@ -6,13 +6,24 @@
   <%= submit_tag('Cange status: new => main') %>
 <% end %>
 <p>
+<%= render 'partials/actually_main_items_list.html' %>
+<p>
+<%= form_tag(action_update_status_home_index_path, method: 'post') do %>
+  <%= submit_tag('Update status') %>
+<% end %>
+<p>
+<%= form_tag(action_create_queries_automatically_buy_item_home_index_path, method: 'post') do %>
+  <%= submit_tag('Create orders for acctually main items') %>
+<% end %>
+<p>
+<%= render 'partials/not_actually_main_items_list.html' %>
+<p>
 <%= render 'partials/main_items_list.html' %>
 <p>
 <%= form_tag(action_remove_ident_items_home_index_path, method: 'post') do %>
   <%= submit_tag('Remove identical items') %>
 <% end %>
 <p>
-<%= form_tag(action_create_queries_automatically_buy_item_home_index_path, method: 'post') do %>
-  <%= submit_tag('Create orders for main items') %>
-<% end %>
-<p>
+
+
+

@@ -3,7 +3,12 @@ class HomeController < ApplicationController
   #actions for pages
   def index
     @new_items = Item.where(status: 'new')
+
     @main_items = Item.where(status: 'main')
+    @actually_main_items = Item.where(status: 'main_actually')
+    @not_actually_main_items = Item.where(status: 'main_not_actually')
+
+    @all_main_items = @main_items + @actually_main_items + @not_actually_main_items
   end
 
   def inventary
@@ -46,7 +51,7 @@ class HomeController < ApplicationController
   def action_create_queries_automatically_buy_item
     @new_items = Item.where(status: 'new')
     @main_items = Item.where(status: 'main')
-    main_object.create_requests_for_main_items
+    main_object.create_requests_for_actually_main_items
   end
 
   def action_remove_ident_items
@@ -61,6 +66,12 @@ class HomeController < ApplicationController
       end
     end
     empty_massive = []
+    redirect_back(fallback_location: root_path)
+  end
+
+  def action_update_status
+    main_object.check_actually_status
+
     redirect_back(fallback_location: root_path)
   end
 
