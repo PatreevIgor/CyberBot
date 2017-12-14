@@ -14,8 +14,10 @@ class Item < ApplicationRecord
         item.price  = current_price(item.class_id, item.instance_id)
         item.save!
       else
-        item.status = 'main_not_actually'
-        item.save!
+        if item.status == 'main_actually' or item.status == 'main'
+          item.status = 'main_not_actually'
+          item.save!
+        end
       end
     end
   end

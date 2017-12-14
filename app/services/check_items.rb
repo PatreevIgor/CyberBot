@@ -40,19 +40,13 @@ module CheckItems
             IDs:#{params[:class_id]}_#{params[:instance_id]}
             Найдено #{Item.where(status: 'new').size} новых шмоток!"
     else 
-      puts "Мусор. Текушая цена #{params[:current_price].to_f}. 
-            Мин #{min_price(params)} 
-            Макс #{max_price(params)} 
-            Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
-            IDs:#{params[:class_id]}_#{params[:instance_id]}
-            Найдено #{Item.where(status: 'new').size} новых шмоток!"
+      puts "Найдено #{Item.where(status: 'new').size} новых шмоток!"
     end
   end
 
   private
 
   def filter_conditions?(params)
-          binding.pry
     if params[:current_price].to_f > min_price(params) &&
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
        params[:current_price].to_f < params[:to_price_input_val].to_i &&
