@@ -31,8 +31,10 @@ module CheckItems
                                              params[:hash_name]),
                   status:                    STATUS_NEW_ITEMS)
 
-      puts "Выгодная шмотка. Текушая цена #{params[:current_price].to_f}.
+      puts "Выгодная шмотка. 
+            Текушая цена #{params[:current_price].to_f}.
             Мин #{min_price(params)} 
+            Cредняя #{middle_price(params)} 
             Макс #{max_price(params)} 
             # Коэф текущего состояния цены: #{coefficient_current_state_of_prices(params)} 
             IDs:#{params[:class_id]}_#{params[:instance_id]}
@@ -50,10 +52,11 @@ module CheckItems
   private
 
   def filter_conditions?(params)
+          binding.pry
     if params[:current_price].to_f > min_price(params) &&
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
        params[:current_price].to_f < params[:to_price_input_val].to_i &&
-       coefficient_current_state_of_prices(params) > params[:coeff_input_val].to_i &&
+       # coefficient_current_state_of_prices(params) > params[:coeff_input_val].to_i &&
        coefficient_profit(best_offer_price(best_buy_offer_url(params[:class_id], params[:instance_id])),
                           best_offer_price(best_sell_offer_url(params[:class_id], params[:instance_id])),
                           2000) == true
@@ -64,10 +67,17 @@ module CheckItems
   end
 
   def coefficient_current_state_of_prices(params)
-    diff_min_max = max_price(params) - min_price(params)
-    diff_min_cur = params[:current_price].to_f - min_price(params)
-    coefficient = 100 - diff_min_cur*100/diff_min_max
-
+    # binding.pry
+    # diff_min_max = max_price(params) - min_price(params)
+    # diff_min_cur = params[:current_price].to_f - min_price(params)
+    # coefficient = 100 - diff_min_cur*100/diff_min_max
+    if params[:current_price].to_f > middle_price(params)
+      coefficient = 0
+    else
+      diff_middle_min = middle_price(params) - min_price(params)
+      diff_middle_curr = params[:current_price].to_f - min_price(params)
+      coefficient = 100 - diff_middle_curr * 100 / diff_middle_min
+    end
     sprintf("%.2f", coefficient).to_f
   end
 
@@ -83,31 +93,39 @@ module CheckItems
     end
   end
 
-  def max_price(params)
-    min_max_prices = get_hash_min_and_max_prices(params)
+  def middle_price(params)
+    min_middle_max_prices = get_hash_min_middle_max_prices(params)
 
-    max_price = min_max_prices["max"].to_f
+    middle_price = min_middle_max_prices["average"].to_f
+  end
+
+  def max_price(params)
+    min_middle_max_prices = get_hash_min_middle_max_prices(params)
+
+    max_price = min_middle_max_prices["max"].to_f
   end
 
   def min_price(params)
-    min_max_prices = get_hash_min_and_max_prices(params)
+    min_middle_max_prices = get_hash_min_middle_max_prices(params)
 
-    min_price = min_max_prices["min"].to_f
+    min_price = min_middle_max_prices["min"].to_f
   end
 
-  def get_hash_min_and_max_prices(params)
+  def get_hash_min_middle_max_prices(params)
     url = item_history_url(params[:class_id], params[:instance_id])
     response = Connection.send_request(url)
 
-    create_hash_min_max_prices(response)
+    create_hash_min_middle_max_prices(response)
   end
 
-  def create_hash_min_max_prices(response)
-    min_max_prices = {}
-    min_max_prices["min"] = response["min"]/100
-    min_max_prices["max"] = response["max"]/100
+  def create_hash_min_middle_max_prices(response)
+    # binding.pry
+    min_middle_max_prices = {}
+    min_middle_max_prices["min"] = response["min"]/100
+    min_middle_max_prices["max"] = response["max"]/100
+    min_middle_max_prices["average"] = response["average"]/100
 
-    min_max_prices
+    min_middle_max_prices
   end
 
   def item_link(i_classid, i_instanceid, i_market_hash_name)

@@ -3,7 +3,7 @@
     <%= form_tag(get_any_items_home_index_path, method: "post") do %>
       <tr>
         <th><%= label_tag(:count_item, "Count item:") %>
-        <%= text_field_tag(:count_item, value = '100') %><th>
+        <%= text_field_tag(:count_item, value = '1000') %><th>
 
         <th><%= label_tag(:from_price, "From price:") %>
         <%= text_field_tag(:from_price, value = '30') %><th>
@@ -12,7 +12,7 @@
         <%= text_field_tag(:to_price, value = '100') %><th>
         
         <th><%= label_tag(:coeff_val,  "Coefficient current state:") %>
-        <%= text_field_tag(:coeff_val, value = '50') %><th>
+        <%= text_field_tag(:coeff_val, value = '1') %><th>
       </tr>
   </tbody>
 </table>

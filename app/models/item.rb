@@ -8,8 +8,10 @@ class Item < ApplicationRecord
     all_main_items.each do |item|
       if coefficient_profit(best_offer_price(best_buy_offer_url(item.class_id,item.instance_id)),
                             best_offer_price(best_sell_offer_url(item.class_id,item.instance_id)),
-                            2000) == true
+                            2000) == true &&
+         coefficient_current_state_of_prices(params_for_coeff_curr_st_of_pr(item)) > 1
         item.status = 'main_actually'
+        item.price  = current_price(item.class_id, item.instance_id)
         item.save!
       else
         item.status = 'main_not_actually'
@@ -18,30 +20,24 @@ class Item < ApplicationRecord
     end
   end
 
-  private 
-
-  # Dublicated
-  def coefficient_profit(price_of_buy, price_of_sell, limit)
-    if (price_of_sell - price_of_buy) - (price_of_sell/100*10) > 0 &&
-       (price_of_sell - price_of_buy) >= limit
-      return true
-    else
-      return false
-    end
+  private
+  
+  def params_for_coeff_curr_st_of_pr(item)
+    {:class_id      => item.class_id,
+     :instance_id   => item.instance_id,
+     :current_price => current_price(item.class_id, item.instance_id),
+     :hash_name     => item.hash_name}
   end
 
-  def best_sell_offer_url(class_id, instance_id)
-    "https://market.dota2.net/api/BestSellOffer/#{class_id}_#{instance_id}/?key="\
-    "#{Rails.application.secrets.your_secret_key}"
+  def current_price(class_id, instance_id)
+    item_informations(class_id, instance_id)['min_price'].to_f / 100
   end
 
-  def best_buy_offer_url(class_id, instance_id)
-    "https://market.dota2.net/api/BestBuyOffer/#{class_id}_#{instance_id}/?key="\
-    "#{Rails.application.secrets.your_secret_key}"
+  def item_informations(class_id, instance_id)
+    Connection.send_request(item_informations_url(class_id, instance_id))
   end
 
-  def best_offer_price(url)
-    response = Connection.send_request(url)
-    response['best_offer'].to_i
+  def item_informations_url(class_id, instance_id)
+    "https://market.dota2.net/api/ItemInfo/#{class_id}_#{instance_id}/ru/?key=#{Rails.application.secrets.your_secret_key}"
   end
 end
