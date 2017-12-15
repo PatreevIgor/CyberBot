@@ -28,10 +28,12 @@ class HomeController < ApplicationController
   def get_any_items
     count_new_items = Item.where(status: 'new').size.to_i
     count_items_params =   params[:count_item].to_i
+
     loop do
       main_object.check_50_last_sales(params[:from_price], params[:to_price], params[:coeff_val])
     break if count_new_items >= count_items_params
     end 
+
     @new_items = Item.where(status: 'new')
     @main_items = Item.where(status: 'main')
     redirect_back(fallback_location: root_path)
