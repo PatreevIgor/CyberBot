@@ -13,7 +13,7 @@
     <% @actually_main_items.each do |item| %>
       <tr>
         <td><%= item.hash_name %></td>
-        <td><%= item.price %></td>
+        <td>&nbsp;<%= item.price %>&nbsp;</td>
         <td><%= link_to 'Link', item.link %>&nbsp;</td>
         <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

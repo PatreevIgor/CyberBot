@@ -58,8 +58,10 @@ class HomeController < ApplicationController
   def action_remove_ident_items
     @new_items = Item.where(status: 'new')
     @main_items = Item.where(status: 'main')
+    items = Item.where(status:'main') + Item.where(status:'main_not_actually')
+
     empty_massive = []
-    @main_items.each do |item|
+    items.each do |item|
       if empty_massive.include?(item.link)
         item.destroy
       else
