@@ -2,6 +2,7 @@ module CheckItems
   STATUS_NEW_ITEMS      = 'new'.freeze
   LAST_50_PURCHASES_URL = 'https://market.dota2.net/history/json/'.freeze
 
+  @@h_test = {}
   def check_50_last_sales(from_price, to_price, coeff_val)
     last_50_purchases.each do |item_hash, empty_val|
       # sleep(0.2)
@@ -29,7 +30,7 @@ module CheckItems
                   link:            item_link(params[:class_id],
                                              params[:instance_id], 
                                              params[:hash_name]),
-                  status:                    STATUS_NEW_ITEMS)
+                  status:                    STATUS_NEW_ITEMS) unless Item.exists?(:link => item_link(params[:class_id],params[:instance_id],params[:hash_name]))
 
       puts "Выгодная шмотка. 
             Текушая цена #{params[:current_price].to_f}.
@@ -115,9 +116,24 @@ module CheckItems
   def create_hash_min_middle_max_prices(response)
     # binding.pry
     min_middle_max_prices = {}
-    min_middle_max_prices["min"] = response["min"]/100
-    min_middle_max_prices["max"] = response["max"]/100
-    min_middle_max_prices["average"] = response["average"]/100
+
+    if response["min"]
+      min_middle_max_prices["min"] = response["min"]/100
+    else
+      min_middle_max_prices["min"] = 100/100
+    end
+
+    if response["max"] 
+      min_middle_max_prices["max"] = response["max"]/100
+    else
+      min_middle_max_prices["max"] = 200/100
+    end
+
+    if response["average"] 
+      min_middle_max_prices["average"] = response["average"]/100
+    else
+      min_middle_max_prices["max"] = 150/100
+    end
 
     min_middle_max_prices
   end
