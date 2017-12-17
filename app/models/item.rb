@@ -31,6 +31,12 @@ class Item < ApplicationRecord
     end
   end
 
+  def self.import(file)
+    CSV.foreach(file.path, headers: true) do |row|
+      Item.create! row.to_hash
+    end
+  end
+
   private
   
   def params_for_coeff_curr_st_of_pr(item)

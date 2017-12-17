@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   root to: 'home#index'
   get 'inventary', to: 'home#inventary'
   
-  resources :items
+  resources :items do
+    collection {post :import}
+  end
   resources :home do
     collection do
       post :check_50_last_sales

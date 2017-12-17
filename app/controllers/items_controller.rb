@@ -10,8 +10,15 @@ class ItemsController < ApplicationController
       format.xls 
     end
   end
+
   def show
     @item = Item.find(params[:id])
+  end
+
+  def import
+    Item.import(params[:file])
+
+    redirect_back(fallback_location: root_path)
   end
 
   def destroy
