@@ -2,23 +2,23 @@
 <p>
 <%= render 'partials/new_items_list.html' %>
 <p>
-<%= form_tag(action_change_status_new_to_main_home_index_path, method: 'post') do %>
+<%= form_tag(button_change_status_new_to_main_home_index_path, method: 'post') do %>
   <%= submit_tag('Cange status: new => main') %>
 <% end %>
 <p>
 <%= render 'partials/actually_main_items_list.html' %>
 <p>
-<%= form_tag(action_update_status_home_index_path, method: 'post') do %>
+<%= form_tag(button_update_status_home_index_path, method: 'post') do %>
   <%= submit_tag('Update status') %>
 <% end %>
 <p>
-<%= form_tag(action_create_queries_automatically_buy_item_home_index_path, method: 'post') do %>
-  <%= submit_tag('Delete old orders / Create new orders for acctually main items') %>
+<%= form_tag(button_re_create_buy_orders_home_index_path, method: 'post') do %>
+  <%= submit_tag('Re-create buy orders') %>
 <% end %>
 <p>
 <h1>Main Items (actually/not_actually/main) - <%= @all_main_items.size %></h1>
 <p>
-<%= form_tag(action_remove_ident_items_home_index_path, method: 'post') do %>
+<%= form_tag(button_remove_ident_items_home_index_path, method: 'post') do %>
   <%= submit_tag('Remove identical items') %>
 <% end %>
 <p>
@@ -28,7 +28,7 @@
   <%= submit_tag('Import CSV') %>
 <% end %>
 <p>
-  Download:
+<h3>Export data:</h3>
   <%= link_to "CSV", items_path(format: "csv") %> |
   <%= link_to "Excel", items_path(format: "xls") %>
 </p>

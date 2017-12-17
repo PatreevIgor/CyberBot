@@ -9,13 +9,13 @@ Rails.application.routes.draw do
   resources :home do
     collection do
       post :check_50_last_sales
-      post :get_any_items
-      post :action_update_not_sale_items
-      post :action_update_sale_items
-      post :action_change_status_new_to_main
-      post :action_create_queries_automatically_buy_item
-      post :action_remove_ident_items
-      post :action_update_status
+      post :button_get_any_items
+      post :button_update_not_sale_items
+      post :button_update_sale_items
+      post :button_change_status_new_to_main
+      post :button_re_create_buy_orders
+      post :button_remove_ident_items
+      post :button_update_status
     end
   end
 end

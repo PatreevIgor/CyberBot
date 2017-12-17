@@ -1,11 +1,18 @@
 module CheckItems
-  STATUS_NEW_ITEMS      = 'new'.freeze
   LAST_50_PURCHASES_URL = 'https://market.dota2.net/history/json/'.freeze
+  STATUS_NEW_ITEMS      = 'new'.freeze
 
-  @@h_test = {}
+  def get_any_items(from_price, to_price, coeff_val, count_item)
+    loop do
+      check_50_last_sales(from_price, to_price, coeff_val)
+    break if Item.where(status: STATUS_NEW_ITEMS).size.to_i >= count_item.to_i
+    end 
+  end
+
+  private
+
   def check_50_last_sales(from_price, to_price, coeff_val)
     last_50_purchases.each do |item_hash, empty_val|
-      # sleep(0.2)
       define_best_item(class_id:             item_hash['classid'],
                        instance_id:          item_hash['instanceid'],
                        current_price:        item_hash['price'],
@@ -45,8 +52,6 @@ module CheckItems
     end
   end
 
-  private
-
   def filter_conditions?(params)
     if params[:current_price].to_f > min_price(params) &&
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
@@ -55,17 +60,13 @@ module CheckItems
        coefficient_profit(best_offer_price(best_buy_offer_url(params[:class_id], params[:instance_id])),
                           best_offer_price(best_sell_offer_url(params[:class_id], params[:instance_id])),
                           2000) == true
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
   def coefficient_current_state_of_prices(params)
-    # binding.pry
-    # diff_min_max = max_price(params) - min_price(params)
-    # diff_min_cur = params[:current_price].to_f - min_price(params)
-    # coefficient = 100 - diff_min_cur*100/diff_min_max
     if params[:current_price].to_f > middle_price(params)
       coefficient = 0
     else
@@ -79,12 +80,9 @@ module CheckItems
   def coefficient_profit(price_of_buy, price_of_sell, limit)
     if (price_of_sell - price_of_buy) - (price_of_sell/100*10) > 0 &&
        (price_of_sell - price_of_buy) >= limit
-      # puts 'coefficient_profit - true'
-      # puts "(price_of_sell - price_of_buy) = #{(price_of_sell - price_of_buy)}"
-      return true
+      true
     else
-      # puts 'coefficient_profit - false'
-      return false
+      false
     end
   end
 
@@ -114,7 +112,6 @@ module CheckItems
   end
 
   def create_hash_min_middle_max_prices(response)
-    # binding.pry
     min_middle_max_prices = {}
 
     if response["min"]

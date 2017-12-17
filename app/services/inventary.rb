@@ -1,9 +1,4 @@
 module Inventary
-
-  NOT_SALE_ITEMS_URL    = "https://market.dota2.net/api/GetInv/?key="\
-                          "#{Rails.application.secrets.your_secret_key}".freeze
-  SALE_ITEMS_URL        = "https://market.dota2.net/api/GetMySellOffers/?key="\
-                          "#{Rails.application.secrets.your_secret_key}".freeze
   STATUS_NOT_SALE_ITEMS = 'not sale'.freeze
   STATUS_SALE_ITEMS     = 'sale on'.freeze
 
