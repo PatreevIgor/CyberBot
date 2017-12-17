@@ -1,4 +1,15 @@
 class ItemsController < ApplicationController
+  require 'csv'
+
+  def index
+    @items = Item.all
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @items.to_csv }
+      format.xls 
+    end
+  end
   def show
     @item = Item.find(params[:id])
   end

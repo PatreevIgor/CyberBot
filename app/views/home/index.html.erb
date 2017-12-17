@@ -22,6 +22,10 @@
   <%= submit_tag('Remove identical items') %>
 <% end %>
 <p>
-
+<p>
+  Download:
+  <%= link_to "CSV", items_path(format: "csv") %> |
+  <%= link_to "Excel", items_path(format: "xls") %>
+</p>
 
 

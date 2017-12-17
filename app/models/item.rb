@@ -22,6 +22,15 @@ class Item < ApplicationRecord
     end
   end
 
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << column_names
+      all.each do |item|
+        csv << item.attributes.values
+      end
+    end
+  end
+
   private
   
   def params_for_coeff_curr_st_of_pr(item)
