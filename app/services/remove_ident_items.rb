@@ -1,4 +1,7 @@
 module RemoveIdentItems
+  STATUS_MAIN_ITEMS = 'main'.freeze
+  STATUS_NOT_ACTUALLY_MAIN_ITEMS = 'main_not_actually'.freeze
+
   def remove_ident_items
     items = Item.where(status:STATUS_MAIN_ITEMS) + Item.where(status:STATUS_NOT_ACTUALLY_MAIN_ITEMS)
     empty_massive = []

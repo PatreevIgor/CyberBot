@@ -37,7 +37,9 @@ module CheckItems
                   link:            item_link(params[:class_id],
                                              params[:instance_id], 
                                              params[:hash_name]),
-                  status:                    STATUS_NEW_ITEMS) unless Item.exists?(:link => item_link(params[:class_id],params[:instance_id],params[:hash_name]))
+                  status:                    STATUS_NEW_ITEMS) unless Item.exists?(:link => item_link(params[:class_id],
+                                                                                   params[:instance_id],
+                                                                                   params[:hash_name]))
 
       puts "Выгодная шмотка. 
             Текушая цена #{params[:current_price].to_f}.
@@ -56,6 +58,7 @@ module CheckItems
     if params[:current_price].to_f > min_price(params) &&
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
        params[:current_price].to_f < params[:to_price_input_val].to_i &&
+       item_not_exists?(params[:class_id], params[:instance_id], params[:hash_name]) &&
        # coefficient_current_state_of_prices(params) > params[:coeff_input_val].to_i &&
        coefficient_profit(best_offer_price(best_buy_offer_url(params[:class_id], params[:instance_id])),
                           best_offer_price(best_sell_offer_url(params[:class_id], params[:instance_id])),
@@ -133,6 +136,10 @@ module CheckItems
     end
 
     min_middle_max_prices
+  end
+
+  def item_not_exists?(class_id, instance_id, hash_name)
+    Item.exists?(:link => item_link(class_id, instance_id, hash_name)) ? false : true
   end
 
   def item_link(i_classid, i_instanceid, i_market_hash_name)
