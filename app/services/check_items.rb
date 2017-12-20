@@ -6,6 +6,13 @@ module CheckItems
   KEY_HASH_NAME_ITEM_HASH   = 'hash_name'.freeze
   KEY_BEST_OFFER_ITEM_HASH  = 'best_offer'.freeze
   URL_LAST_50_PURCHASES     = 'https://market.dota2.net/history/json/'.freeze
+  BEST_BUY_OFFER_URL        = 'https://market.dota2.net/api/BestBuyOffer/'\
+                              '%{class_id}_%{instance_id}/?key=%{your_secret_key}'
+  BEST_SELL_OFFER_URL       = 'https://market.dota2.net/api/BestSellOffer/'\
+                              '%{class_id}_%{instance_id}/?key=%{your_secret_key}'
+  ITEM_LINK                 = 'https://market.dota2.net/item/'\
+                              '%{class_id}-%{instance_id}-%{i_market_hash_name}/'
+  MESSAGE_TO_CONSOLE        = 'Found %{count_item} new items!'
 
   def get_any_items(from_price, to_price, coeff_val, count_item)
     loop do
@@ -38,12 +45,12 @@ module CheckItems
                   instance_id:     params[:instance_id],
                   hash_name:       params[:hash_name],
                   price:           params[:current_price],
-                  link:            item_link(params[:class_id],
-                                             params[:instance_id], 
-                                             params[:hash_name]),
+                  link:            ITEM_LINK % { class_id:           params[:class_id],
+                                                 instance_id:        params[:instance_id], 
+                                                 i_market_hash_name: params[:hash_name] },
                   status:                    STATUS_NEW_ITEMS)
     else 
-      puts "Found #{Item.where(status: 'new').size} new items!"
+      puts MESSAGE_TO_CONSOLE % { count_item: Item.where(status: STATUS_NEW_ITEMS).size }
     end
   end
 
@@ -60,39 +67,31 @@ module CheckItems
   end
 
   def item_not_exists?(class_id, instance_id, hash_name)
-    Item.exists?(:link => item_link(class_id, instance_id, hash_name)) ? false : true
-  end
-
-  def item_link(i_classid, i_instanceid, i_market_hash_name)
-    "https://market.dota2.net/item/#{i_classid}-#{i_instanceid}-#{i_market_hash_name.gsub(' ','+')}/"
+    Item.exists?(:link => ITEM_LINK % { class_id: class_id,
+                                        instance_id: instance_id, 
+                                        i_market_hash_name: hash_name.gsub(' ','+')}) ? false : true
   end
 
   def item_profitability?(price_of_buy, price_of_sell, limit_of_benefit)
-    clean_benefit = price_of_sell - price_of_buy - (price_of_sell  / 100 * 10)
+    clean_benefit = price_of_sell - price_of_buy - (price_of_sell / 100 * 10)
 
     clean_benefit >= limit_of_benefit ? true : false
   end
 
   def price_of_buy(params)
-    best_offer_price(best_buy_offer_url(params[:class_id], params[:instance_id]))
+    best_offer_price(BEST_BUY_OFFER_URL % { class_id:        params[:class_id], 
+                                            instance_id:     params[:instance_id], 
+                                            your_secret_key: Rails.application.secrets.your_secret_key })
   end
 
   def price_of_sell(params)
-    best_offer_price(best_sell_offer_url(params[:class_id], params[:instance_id]))
+    best_offer_price(BEST_SELL_OFFER_URL % { class_id:        params[:class_id], 
+                                             instance_id:     params[:instance_id], 
+                                             your_secret_key: Rails.application.secrets.your_secret_key })
   end
 
   def best_offer_price(url)
     response = Connection.send_request(url)
-    response['best_offer'].to_i
-  end
-
-  def best_buy_offer_url(class_id, instance_id)
-    "https://market.dota2.net/api/BestBuyOffer/#{class_id}_#{instance_id}/?key="\
-    "#{Rails.application.secrets.your_secret_key}"
-  end
-
-  def best_sell_offer_url(class_id, instance_id)
-    "https://market.dota2.net/api/BestSellOffer/#{class_id}_#{instance_id}/?key="\
-    "#{Rails.application.secrets.your_secret_key}"
+    response[KEY_BEST_OFFER_ITEM_HASH].to_i
   end
 end
