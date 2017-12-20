@@ -9,10 +9,10 @@ module UpdateStatus
                      Item.where(status:STATUS_ACTUALLY_MAIN_ITEMS) +
                      Item.where(status:STATUS_NOT_ACTUALLY_MAIN_ITEMS)
     all_main_items.each do |item|
-      if coefficient_profit(best_offer_price(best_buy_offer_url(item.class_id,item.instance_id)),
-                            best_offer_price(best_sell_offer_url(item.class_id,item.instance_id)),
-                            2000) == true &&
-         coefficient_current_state_of_prices(params_for_coeff_curr_st_of_pr(item)) > 1
+      if coefficient_current_state_of_prices(params_for_coeff_curr_st_of_pr(item)) > 1 &&
+         item_profitability?(best_offer_price(best_buy_offer_url(item.class_id,item.instance_id)),
+                             best_offer_price(best_sell_offer_url(item.class_id,item.instance_id)),
+                             1000)
         item.status = STATUS_ACTUALLY_MAIN_ITEMS
         item.price  = current_price(item.class_id, item.instance_id)
         item.save!
@@ -26,6 +26,17 @@ module UpdateStatus
   end
 
   private
+
+  def coefficient_current_state_of_prices(params)
+    if params[:current_price].to_f > middle_price(params)
+      coefficient = 0
+    else
+      diff_middle_min = middle_price(params) - min_price(params)
+      diff_middle_curr = params[:current_price].to_f - min_price(params)
+      coefficient = 100 - diff_middle_curr * 100 / diff_middle_min
+    end
+    sprintf("%.2f", coefficient).to_f
+  end
 
   def params_for_coeff_curr_st_of_pr(item)
     {:class_id      => item.class_id,
@@ -47,16 +58,7 @@ module UpdateStatus
     "#{Rails.application.secrets.your_secret_key}"
   end
 
-  def coefficient_current_state_of_prices(params)
-    if params[:current_price].to_f > middle_price(params)
-      coefficient = 0
-    else
-      diff_middle_min = middle_price(params) - min_price(params)
-      diff_middle_curr = params[:current_price].to_f - min_price(params)
-      coefficient = 100 - diff_middle_curr * 100 / diff_middle_min
-    end
-    sprintf("%.2f", coefficient).to_f
-  end
+
 
   def middle_price(params)
     min_middle_max_prices = get_hash_min_middle_max_prices(params)
@@ -106,7 +108,6 @@ module UpdateStatus
 
     min_middle_max_prices
   end
-
 
   def item_history_url(class_id, instance_id)
     url = "https://market.dota2.net/api/ItemHistory/#{class_id.to_s}_#{instance_id.to_s}/?key="\

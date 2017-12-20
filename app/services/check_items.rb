@@ -1,6 +1,5 @@
 module CheckItems
   STATUS_NEW_ITEMS          = 'new'.freeze
-  MESSAGE_FOR_CONSOLE       = "Found #{Item.where(status: 'new').size} new items!".freeze
   KEY_CLASS_ID_ITEM_HASH    = 'classid'.freeze
   KEY_INSTANCE_ID_ITEM_HASH = 'instanceid'.freeze
   KEY_PRICE_ITEM_HASH       = 'price'.freeze
@@ -44,7 +43,7 @@ module CheckItems
                                              params[:hash_name]),
                   status:                    STATUS_NEW_ITEMS)
     else 
-      send_message_to_console
+      puts "Found #{Item.where(status: 'new').size} new items!"
     end
   end
 
@@ -53,7 +52,7 @@ module CheckItems
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
        params[:current_price].to_f < params[:to_price_input_val].to_i &&
        item_not_exists?(params[:class_id], params[:instance_id], params[:hash_name]) &&
-       item_profitability?(price_of_buy(params), price_of_sell(params), 2000)
+       item_profitability?(price_of_buy(params), price_of_sell(params), 1000)
       true
     else
       false
@@ -95,9 +94,5 @@ module CheckItems
   def best_sell_offer_url(class_id, instance_id)
     "https://market.dota2.net/api/BestSellOffer/#{class_id}_#{instance_id}/?key="\
     "#{Rails.application.secrets.your_secret_key}"
-  end
-
-  def send_message_to_console
-    puts MESSAGE_FOR_CONSOLE
   end
 end
