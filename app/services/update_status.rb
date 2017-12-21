@@ -17,12 +17,14 @@ module UpdateStatus
                      Item.where(status:STATUS_NOT_ACTUALLY_MAIN_ITEMS)
     all_main_items.each do |item|
       if coefficient_current_state_of_prices(params_for_coeff_curr_st_of_pr(item)) > 1 &&
-         item_profitability?(best_offer_price(CheckItems::BEST_BUY_OFFER_URL % { class_id:        item.class_id, 
-                                                                     instance_id:     item.instance_id,
-                                                                     your_secret_key: Rails.application.secrets.your_secret_key}),
-                             best_offer_price(CheckItems::BEST_SELL_OFFER_URL % { class_id:        item.class_id, 
-                                                                      instance_id:     item.instance_id,
-                                                                      your_secret_key: Rails.application.secrets.your_secret_key}),
+         item_profitability?(best_offer_price(CheckItems::BEST_BUY_OFFER_URL % { 
+                                              class_id:        item.class_id, 
+                                              instance_id:     item.instance_id,
+                                              your_secret_key: Rails.application.secrets.your_secret_key}),
+                             best_offer_price(CheckItems::BEST_SELL_OFFER_URL % { 
+                                              class_id:        item.class_id, 
+                                              instance_id:     item.instance_id,
+                                              your_secret_key: Rails.application.secrets.your_secret_key}),
                              1000)
         item.status = STATUS_ACTUALLY_MAIN_ITEMS
         item.price  = current_price(item.class_id, item.instance_id)
@@ -100,7 +102,7 @@ module UpdateStatus
     response[KEY_MAX]     ? (min_middle_max_prices[KEY_MAX] = response[KEY_MAX]/100) :
                             (min_middle_max_prices[KEY_MAX] = 200/100)
     response[KEY_AVERAGE] ? (min_middle_max_prices[KEY_AVERAGE] = response[KEY_AVERAGE]/100) :
-                            (min_middle_max_prices[KEY_MAX] = 150/100)
+                            (min_middle_max_prices[KEY_MAX]     = 150/100)
 
     min_middle_max_prices
   end
