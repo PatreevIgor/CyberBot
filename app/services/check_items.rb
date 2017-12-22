@@ -1,4 +1,10 @@
 module CheckItems
+  # extend ActiveSupport::Concern
+
+  # included do
+  #   scope :new_items, -> { where(status: STATUS_NEW_ITEMS) }
+  # end
+
   STATUS_NEW_ITEMS          = 'new'.freeze
   KEY_CLASS_ID_ITEM_HASH    = 'classid'.freeze
   KEY_INSTANCE_ID_ITEM_HASH = 'instanceid'.freeze
@@ -7,12 +13,13 @@ module CheckItems
   KEY_BEST_OFFER_ITEM_HASH  = 'best_offer'.freeze
   URL_LAST_50_PURCHASES     = 'https://market.dota2.net/history/json/'.freeze
   BEST_BUY_OFFER_URL        = 'https://market.dota2.net/api/BestBuyOffer/'\
-                              '%{class_id}_%{instance_id}/?key=%{your_secret_key}'
+                              '%{class_id}_%{instance_id}/?key=%{your_secret_key}'.freeze
   BEST_SELL_OFFER_URL       = 'https://market.dota2.net/api/BestSellOffer/'\
-                              '%{class_id}_%{instance_id}/?key=%{your_secret_key}'
+                              '%{class_id}_%{instance_id}/?key=%{your_secret_key}'.freeze
   ITEM_LINK                 = 'https://market.dota2.net/item/'\
-                              '%{class_id}-%{instance_id}-%{i_market_hash_name}/'
-  MESSAGE_TO_CONSOLE        = 'Found %{count_item} new items!'
+                              '%{class_id}-%{instance_id}-%{i_market_hash_name}/'.freeze
+  TEXT_COUNT_FOUND_ITEMS    = 'Found %{count_item} new items!'.freeze
+  TEXT_ITEM_CREATED         = 'Item created!'.freeze
 
   def get_any_items(from_price, to_price, coeff_val, count_item)
     loop do
@@ -48,9 +55,10 @@ module CheckItems
                   link:            ITEM_LINK % { class_id:           params[:class_id],
                                                  instance_id:        params[:instance_id], 
                                                  i_market_hash_name: params[:hash_name] },
-                  status:                    STATUS_NEW_ITEMS)
+                  status:          STATUS_NEW_ITEMS)
+      puts TEXT_ITEM_CREATED
     else 
-      puts MESSAGE_TO_CONSOLE % { count_item: Item.where(status: STATUS_NEW_ITEMS).size }
+      puts TEXT_COUNT_FOUND_ITEMS % { count_item: Item.where(status: STATUS_NEW_ITEMS).size }
     end
   end
 
@@ -67,9 +75,9 @@ module CheckItems
   end
 
   def item_not_exists?(class_id, instance_id, hash_name)
-    Item.exists?(:link => ITEM_LINK % { class_id: class_id,
-                                        instance_id: instance_id, 
-                                        i_market_hash_name: hash_name.gsub(' ','+')}) ? false : true
+    Item.exists?(link: ITEM_LINK % { class_id:           class_id,
+                                     instance_id:        instance_id, 
+                                     i_market_hash_name: hash_name.gsub(' ','+') }) ? false : true
   end
 
   def item_profitability?(price_of_buy, price_of_sell, limit_of_benefit)

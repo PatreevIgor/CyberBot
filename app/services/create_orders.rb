@@ -24,6 +24,7 @@ module CreateOrders
   def create_order_item(class_id, instance_id, price)
     Connection.send_request(CREATE_ORDER_URL % { class_id:        class_id,
                                                  instance_id:     instance_id,
+                                                 price:           price,          
                                                  your_secret_key: Rails.application.secrets.your_secret_key })
   end
 
