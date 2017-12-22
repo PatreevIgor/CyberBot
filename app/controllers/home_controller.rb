@@ -1,22 +1,22 @@
 class HomeController < ApplicationController
-  STATUS_NOT_ACTUALLY_MAIN_ITEMS = 'main_not_actually'.freeze
-  STATUS_ACTUALLY_MAIN_ITEMS     = 'main_actually'.freeze
-  STATUS_NOT_SALE_ITEMS          = 'not sale'.freeze
-  STATUS_SALE_ITEMS              = 'sale on'.freeze
-  STATUS_MAIN_ITEMS              = 'main'.freeze
-  STATUS_NEW_ITEMS               = 'new'.freeze
+  NOT_ACTUALLY_MAIN_ITEMS_STATUS = 'main_not_actually'.freeze
+  ACTUALLY_MAIN_ITEMS_STATUS     = 'main_actually'.freeze
+  NOT_SALE_ITEMS_STATUS          = 'not sale'.freeze
+  SALE_ITEMS_STATUS              = 'sale on'.freeze
+  MAIN_ITEMS_STATUS              = 'main'.freeze
+  NEW_ITEMS_STATUS               = 'new'.freeze
 
   def index
-    @not_actually_main_items = Item.where(status: STATUS_NOT_ACTUALLY_MAIN_ITEMS)
-    @actually_main_items     = Item.where(status: STATUS_ACTUALLY_MAIN_ITEMS)
-    @main_items              = Item.where(status: STATUS_MAIN_ITEMS)
-    @new_items               = Item.where(status: STATUS_NEW_ITEMS)
+    @not_actually_main_items = Item.where(status: NOT_ACTUALLY_MAIN_ITEMS_STATUS)
+    @actually_main_items     = Item.where(status: ACTUALLY_MAIN_ITEMS_STATUS)
+    @main_items              = Item.where(status: MAIN_ITEMS_STATUS)
+    @new_items               = Item.where(status: NEW_ITEMS_STATUS)
     @all_main_items          = @main_items + @actually_main_items + @not_actually_main_items
   end
 
   def inventary
-    @not_sale_items = Item.where(status: STATUS_NOT_SALE_ITEMS)
-    @sale_items     = Item.where(status: STATUS_SALE_ITEMS)
+    @not_sale_items = Item.where(status: NOT_SALE_ITEMS_STATUS)
+    @sale_items     = Item.where(status: SALE_ITEMS_STATUS)
   end
 
   def button_update_not_sale_items

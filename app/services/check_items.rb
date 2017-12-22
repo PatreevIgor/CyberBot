@@ -2,29 +2,29 @@ module CheckItems
   # extend ActiveSupport::Concern
 
   # included do
-  #   scope :new_items, -> { where(status: STATUS_NEW_ITEMS) }
+  #   scope :new_items, -> { where(status: NEW_ITEMS_STATUS) }
   # end
 
-  STATUS_NEW_ITEMS          = 'new'.freeze
-  KEY_CLASS_ID_ITEM_HASH    = 'classid'.freeze
-  KEY_INSTANCE_ID_ITEM_HASH = 'instanceid'.freeze
-  KEY_PRICE_ITEM_HASH       = 'price'.freeze
-  KEY_HASH_NAME_ITEM_HASH   = 'hash_name'.freeze
-  KEY_BEST_OFFER_ITEM_HASH  = 'best_offer'.freeze
-  URL_LAST_50_PURCHASES     = 'https://market.dota2.net/history/json/'.freeze
+  NEW_ITEMS_STATUS          = 'new'.freeze
+  ITEM_HASH_CLASS_ID_KEY    = 'classid'.freeze
+  ITEM_HASH_INSTANCE_ID_KEY = 'instanceid'.freeze
+  ITEM_HASH_PRICE_KEY       = 'price'.freeze
+  ITEM_HASH_HASH_NAME_KEY   = 'hash_name'.freeze
+  ITEM_HASH_BEST_OFFER_KEY  = 'best_offer'.freeze
+  LAST_50_PURCHASES_URL     = 'https://market.dota2.net/history/json/'.freeze
   BEST_BUY_OFFER_URL        = 'https://market.dota2.net/api/BestBuyOffer/'\
                               '%{class_id}_%{instance_id}/?key=%{your_secret_key}'.freeze
   BEST_SELL_OFFER_URL       = 'https://market.dota2.net/api/BestSellOffer/'\
                               '%{class_id}_%{instance_id}/?key=%{your_secret_key}'.freeze
   ITEM_LINK                 = 'https://market.dota2.net/item/'\
                               '%{class_id}-%{instance_id}-%{i_market_hash_name}/'.freeze
-  TEXT_COUNT_FOUND_ITEMS    = 'Found %{count_item} new items!'.freeze
-  TEXT_ITEM_CREATED         = 'Item created!'.freeze
+  COUNT_FOUND_ITEMS_TEXT    = 'Found %{count_item} new items!'.freeze
+  ITEM_CREATED_TEXT         = 'Item created!'.freeze
 
   def get_any_items(from_price, to_price, coeff_val, count_item)
     loop do
       check_50_last_sales(from_price, to_price, coeff_val)
-    break if Item.where(status: STATUS_NEW_ITEMS).size.to_i >= count_item.to_i
+    break if Item.where(status: NEW_ITEMS_STATUS).size.to_i >= count_item.to_i
     end 
   end
 
@@ -32,10 +32,10 @@ module CheckItems
 
   def check_50_last_sales(from_price, to_price, coeff_val)
     last_50_purchases.each do |item_hash, empty_val|
-      define_best_item(class_id:             item_hash[KEY_CLASS_ID_ITEM_HASH],
-                       instance_id:          item_hash[KEY_INSTANCE_ID_ITEM_HASH],
-                       current_price:        item_hash[KEY_PRICE_ITEM_HASH],
-                       hash_name:            item_hash[KEY_HASH_NAME_ITEM_HASH],
+      define_best_item(class_id:             item_hash[ITEM_HASH_CLASS_ID_KEY],
+                       instance_id:          item_hash[ITEM_HASH_INSTANCE_ID_KEY],
+                       current_price:        item_hash[ITEM_HASH_PRICE_KEY],
+                       hash_name:            item_hash[ITEM_HASH_HASH_NAME_KEY],
                        from_price_input_val: from_price,
                        to_price_input_val:   to_price,
                        coeff_input_val:      coeff_val)
@@ -43,7 +43,7 @@ module CheckItems
   end
 
   def last_50_purchases
-    Connection.send_request(URL_LAST_50_PURCHASES)
+    Connection.send_request(LAST_50_PURCHASES_URL)
   end
 
   def define_best_item(params)
@@ -55,10 +55,10 @@ module CheckItems
                   link:            ITEM_LINK % { class_id:           params[:class_id],
                                                  instance_id:        params[:instance_id], 
                                                  i_market_hash_name: params[:hash_name] },
-                  status:          STATUS_NEW_ITEMS)
-      puts TEXT_ITEM_CREATED
+                  status:          NEW_ITEMS_STATUS)
+      puts ITEM_CREATED_TEXT
     else 
-      puts TEXT_COUNT_FOUND_ITEMS % { count_item: Item.where(status: STATUS_NEW_ITEMS).size }
+      puts COUNT_FOUND_ITEMS_TEXT % { count_item: Item.where(status: NEW_ITEMS_STATUS).size }
     end
   end
 
@@ -100,6 +100,6 @@ module CheckItems
 
   def best_offer_price(url)
     response = Connection.send_request(url)
-    response[KEY_BEST_OFFER_ITEM_HASH].to_i
+    response[ITEM_HASH_BEST_OFFER_KEY].to_i
   end
 end

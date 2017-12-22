@@ -1,10 +1,10 @@
 module ChangeStatus
-  STATUS_MAIN_ITEMS = 'main'.freeze
-  STATUS_NEW_ITEMS  = 'new'.freeze
+  MAIN_ITEMS_STATUS = 'main'.freeze
+  NEW_ITEMS_STATUS  = 'new'.freeze
 
   def change_status_new_to_main
-    Item.where(status: STATUS_NEW_ITEMS).each do |item|
-      item.status = STATUS_MAIN_ITEMS
+    Item.where(status: NEW_ITEMS_STATUS).each do |item|
+      item.status = MAIN_ITEMS_STATUS
       item.save!
     end
   end
