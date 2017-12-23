@@ -1,5 +1,5 @@
 module CheckItems
-  # extend ActiveSupport::Concern
+  # extend ActiveSupport::Concern 
 
   # included do
   #   scope :new_items, -> { where(status: NEW_ITEMS_STATUS) }
