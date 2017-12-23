@@ -1,37 +1,25 @@
 module UpdateStatus
-  STATUS_MAIN_ITEMS                = 'main'.freeze
-  STATUS_ACTUALLY_MAIN_ITEMS       = 'main_actually'.freeze
-  STATUS_NOT_ACTUALLY_MAIN_ITEMS   = 'main_not_actually'.freeze
-  KEY_MIN_PRICE_OF_HASH_ITEM_INFO  = 'min_price'.freeze
-  KEY_MIN                          = 'min'.freeze
-  KEY_MAX                          = 'max'.freeze
-  KEY_AVERAGE                      = 'average'.freeze
-  ITEM_HISTORY_URL                 = 'https://market.dota2.net/api/ItemHistory/'\
-                                     '%{class_id}_%{instance_id}/?key=%{your_secret_key}'.freeze
-  ITEM_INFORMATION_URL             = 'https://market.dota2.net/api/ItemInfo/'\
-                                     '%{class_id}_%{instance_id}/ru/?key=%{your_secret_key}'.freeze
-
   def update_status
-    all_main_items = Item.where(status:STATUS_MAIN_ITEMS) +
-                     Item.where(status:STATUS_ACTUALLY_MAIN_ITEMS) +
-                     Item.where(status:STATUS_NOT_ACTUALLY_MAIN_ITEMS)
+    all_main_items = Item.where(status:Constant::MAIN_ITEMS_STATUS) +
+                     Item.where(status:Constant::ACTUALLY_MAIN_ITEMS_STATUS) +
+                     Item.where(status:Constant::NOT_ACTUALLY_MAIN_ITEMS_STATUS)
     all_main_items.each do |item|
       if coefficient_current_state_of_prices(params_for_coeff_curr_st_of_pr(item)) > 1 &&
-         item_profitability?(best_offer_price(CheckItems::BEST_BUY_OFFER_URL % { 
-                                              class_id:        item.class_id, 
-                                              instance_id:     item.instance_id,
-                                              your_secret_key: Rails.application.secrets.your_secret_key}),
-                             best_offer_price(CheckItems::BEST_SELL_OFFER_URL % { 
-                                              class_id:        item.class_id, 
-                                              instance_id:     item.instance_id,
-                                              your_secret_key: Rails.application.secrets.your_secret_key}),
+         item_profitability?(best_offer_price(Constant::BEST_BUY_OFFER_URL % { 
+                                                class_id:        item.class_id, 
+                                                instance_id:     item.instance_id,
+                                                your_secret_key: Rails.application.secrets.your_secret_key}),
+                             best_offer_price(Constant::BEST_SELL_OFFER_URL % { 
+                                                class_id:        item.class_id, 
+                                                instance_id:     item.instance_id,
+                                                your_secret_key: Rails.application.secrets.your_secret_key}),
                              1000)
-        item.status = STATUS_ACTUALLY_MAIN_ITEMS
+        item.status = Constant::ACTUALLY_MAIN_ITEMS_STATUS
         item.price  = current_price(item.class_id, item.instance_id)
         item.save!
       else
-        if item.status == STATUS_ACTUALLY_MAIN_ITEMS or item.status == STATUS_MAIN_ITEMS
-          item.status = STATUS_NOT_ACTUALLY_MAIN_ITEMS
+        if item.status == Constant::ACTUALLY_MAIN_ITEMS_STATUS or item.status == Constant::MAIN_ITEMS_STATUS
+          item.status = Constant::NOT_ACTUALLY_MAIN_ITEMS_STATUS
           item.save!
         end
       end
@@ -59,37 +47,38 @@ module UpdateStatus
   end
 
   def current_price(class_id, instance_id)
-    item_informations(class_id, instance_id)[KEY_MIN_PRICE_OF_HASH_ITEM_INFO].to_f / 100
+    item_informations(class_id, instance_id)[Constant::ITEM_INFO_HASH_MIN_PRICE_KEY].to_f / 100
   end
 
   def item_informations(class_id, instance_id)
-    Connection.send_request(ITEM_INFORMATION_URL % { class_id:        class_id, 
-                                                     instance_id:     instance_id, 
-                                                     your_secret_key: Rails.application.secrets.your_secret_key })
+    Connection.send_request(Constant::ITEM_INFORMATION_URL % {
+                              class_id:        class_id, 
+                              instance_id:     instance_id, 
+                              your_secret_key: Rails.application.secrets.your_secret_key })
   end
 
   def middle_price(params)
     min_middle_max_prices = get_hash_min_middle_max_prices(params)
 
-    middle_price = min_middle_max_prices[KEY_AVERAGE].to_f
+    middle_price = min_middle_max_prices[Constant::HASH_AVERAGE_KEY].to_f
   end
 
   def max_price(params)
     min_middle_max_prices = get_hash_min_middle_max_prices(params)
 
-    max_price = min_middle_max_prices[KEY_MAX].to_f
+    max_price = min_middle_max_prices[Constant::HASH_MAX_KEY].to_f
   end
 
   def min_price(params)
     min_middle_max_prices = get_hash_min_middle_max_prices(params)
 
-    min_price = min_middle_max_prices[KEY_MIN].to_f
+    min_price = min_middle_max_prices[Constant::HASH_MIN_KEY].to_f
   end
 
   def get_hash_min_middle_max_prices(params)
-    url = ITEM_HISTORY_URL % { class_id:        params[:class_id].to_s,
-                               instance_id:     params[:instance_id].to_s,
-                               your_secret_key: Rails.application.secrets.your_secret_key}
+    url = Constant::ITEM_HISTORY_URL % { class_id:        params[:class_id].to_s,
+                                         instance_id:     params[:instance_id].to_s,
+                                         your_secret_key: Rails.application.secrets.your_secret_key}
     response = Connection.send_request(url)
 
     create_hash_min_middle_max_prices(response)
@@ -97,12 +86,18 @@ module UpdateStatus
 
   def create_hash_min_middle_max_prices(response)
     min_middle_max_prices = {}
-    response[KEY_MIN]     ? (min_middle_max_prices[KEY_MIN] = response[KEY_MIN]/100) :
-                            (min_middle_max_prices[KEY_MIN] = 100/100)
-    response[KEY_MAX]     ? (min_middle_max_prices[KEY_MAX] = response[KEY_MAX]/100) :
-                            (min_middle_max_prices[KEY_MAX] = 200/100)
-    response[KEY_AVERAGE] ? (min_middle_max_prices[KEY_AVERAGE] = response[KEY_AVERAGE]/100) :
-                            (min_middle_max_prices[KEY_MAX]     = 150/100)
+
+    response[Constant::HASH_MIN_KEY] ?
+    (min_middle_max_prices[Constant::HASH_MIN_KEY] = response[Constant::HASH_MIN_KEY]/100) :
+    (min_middle_max_prices[Constant::HASH_MIN_KEY] = 100/100)
+
+    response[Constant::HASH_MAX_KEY] ?
+    (min_middle_max_prices[Constant::HASH_MAX_KEY] = response[Constant::HASH_MAX_KEY]/100) :
+    (min_middle_max_prices[Constant::HASH_MAX_KEY] = 200/100)
+
+    response[Constant::HASH_AVERAGE_KEY] ?
+    (min_middle_max_prices[Constant::HASH_AVERAGE_KEY] = response[Constant::HASH_AVERAGE_KEY]/100) :
+    (min_middle_max_prices[Constant::HASH_MAX_KEY]     = 150/100)
 
     min_middle_max_prices
   end

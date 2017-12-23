@@ -1,15 +1,18 @@
 module Inventary
-  STATUS_NOT_SALE_ITEMS = 'not sale'.freeze
-  STATUS_SALE_ITEMS     = 'sale on'.freeze
-
   def update_not_sale_items
-    Item.all.where(status: STATUS_NOT_SALE_ITEMS).delete_all
+    delete_not_sale_items
     create_not_sale_items
   end
 
   def update_sale_items
-    Item.all.where(status: STATUS_SALE_ITEMS).delete_all
+    delete_sale_items
     create_sale_items
+  end
+
+  private
+
+  def delete_not_sale_items
+    Item.all.where(status: Constant::NOT_SALE_ITEMS_STATUS).delete_all
   end
 
   def create_not_sale_items
@@ -36,13 +39,21 @@ module Inventary
                       tradable:            item_attr['tradable'],
                       i_market_price:      item_attr['i_market_price'], 
                       i_market_price_text: item_attr['i_market_price_text'],
-                      link:                item_link(item_attr['i_classid'],
-                                                     item_attr['i_instanceid'],
-                                                     item_attr['i_market_hash_name']),
-                      status:              STATUS_NOT_SALE_ITEMS)
+                      link:      Constant::ITEM_LINK_URL % { class_id:           item_attr['i_classid'],
+                                                             instance_id:        item_attr['i_instanceid'], 
+                                                             i_market_hash_name: item_attr['i_market_hash_name'] },
+                      status:    Constant::NOT_SALE_ITEMS_STATUS)
         end
       end
     end
+  end
+
+  def not_sale_items
+    Connection.send_request(Constant::NOT_SALE_ITEMS_URL % { your_secret_key: Rails.application.secrets.your_secret_key })
+  end
+
+  def delete_sale_items
+    Item.all.where(status: Constant::SALE_ITEMS_STATUS).delete_all
   end
 
   def create_sale_items
@@ -66,31 +77,21 @@ module Inventary
                       ui_bid:              item_attr['ui_bid'], 
                       ui_asset:            item_attr['ui_asset'], 
                       type_new:            item_attr['type'], 
-                      ui_price_text:       item_attr['ui_price_text'],
+                      ui_price_text:       item_attr['ui_price_text'].to_s,
                       i_market_price_text: item_attr['i_market_price_text'],
                       offer_live_time:     item_attr['offer_live_time'],
                       placed:              item_attr['placed'],
                       i_market_hash_name:  item_attr['i_market_hash_name'],
-                      link:                item_link(item_attr['i_classid'],
-                                                     item_attr['i_instanceid'],
-                                                     item_attr['i_market_hash_name']),
-                      status:              STATUS_SALE_ITEMS)
+                      link:      Constant::ITEM_LINK_URL % { class_id:           item_attr['i_classid'],
+                                                             instance_id:        item_attr['i_instanceid'], 
+                                                             i_market_hash_name: item_attr['i_market_hash_name'] },
+                      status:    Constant::NOT_SALE_ITEMS_STATUS)
         end
       end
     end
   end
 
-  private
-
-  def not_sale_items
-    Connection.send_request(NOT_SALE_ITEMS_URL)
-  end
-
   def sale_items
-    Connection.send_request(SALE_ITEMS_URL)
-  end
-
-  def item_link(i_classid, i_instanceid, i_market_hash_name)
-    "https://market.dota2.net/item/#{i_classid}-#{i_instanceid}-#{i_market_hash_name.gsub(' ','+')}/"
+    Connection.send_request(Constant::SALE_ITEMS_URL % { your_secret_key: Rails.application.secrets.your_secret_key })
   end
 end
