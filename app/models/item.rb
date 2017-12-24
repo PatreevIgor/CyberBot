@@ -5,6 +5,7 @@ class Item < ApplicationRecord
   include UpdateStatus
   include ChangeStatus
   include RemoveIdentItems
+  include UpdatePriceBoughtItems
 
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|

@@ -10,13 +10,13 @@ module CheckItems
 
   def check_50_last_sales(from_price, to_price, coeff_val)
     last_50_purchases.each do |item_hash, empty_val|
-      define_best_item(class_id:             item_hash[Constant::ITEM_HASH_CLASS_ID_KEY],
-                       instance_id:          item_hash[Constant::ITEM_HASH_INSTANCE_ID_KEY],
-                       current_price:        item_hash[Constant::ITEM_HASH_PRICE_KEY],
-                       hash_name:            item_hash[Constant::ITEM_HASH_HASH_NAME_KEY],
-                       from_price_input_val: from_price,
-                       to_price_input_val:   to_price,
-                       coeff_input_val:      coeff_val)
+      define_and_create_best_item(class_id:             item_hash[Constant::ITEM_HASH_CLASS_ID_KEY],
+                                  instance_id:          item_hash[Constant::ITEM_HASH_INSTANCE_ID_KEY],
+                                  current_price:        item_hash[Constant::ITEM_HASH_PRICE_KEY],
+                                  hash_name:            item_hash[Constant::ITEM_HASH_HASH_NAME_KEY],
+                                  from_price_input_val: from_price,
+                                  to_price_input_val:   to_price,
+                                  coeff_input_val:      coeff_val)
     end
   end
 
@@ -24,7 +24,7 @@ module CheckItems
     Connection.send_request(Constant::LAST_50_PURCHASES_URL)
   end
 
-  def define_best_item(params)
+  def define_and_create_best_item(params)
     if filter_conditions?(params)
       Item.create(class_id:        params[:class_id],
                   instance_id:     params[:instance_id],
