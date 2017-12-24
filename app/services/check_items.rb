@@ -20,7 +20,7 @@ module CheckItems
     end
   end
 
-  def last_50_purchases
+  def last_50_purchases 
     Connection.send_request(Constant::LAST_50_PURCHASES_URL)
   end
 
@@ -41,10 +41,10 @@ module CheckItems
   end
 
   def filter_conditions?(params)
-    if params[:current_price].to_f > min_price(params) &&
+    if params[:current_price].to_f > min_price(params)                  &&
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
-       params[:current_price].to_f < params[:to_price_input_val].to_i &&
-       item_not_exists?(params[:class_id], params[:instance_id], params[:hash_name]) &&
+       params[:current_price].to_f < params[:to_price_input_val].to_i   &&
+       item_not_exists?(params)                                         &&
        item_profitability?(price_of_buy(params), price_of_sell(params), 1000)
       true
     else
@@ -52,10 +52,10 @@ module CheckItems
     end
   end
 
-  def item_not_exists?(class_id, instance_id, hash_name)
-    Item.exists?(link: Constant::ITEM_LINK_URL % { class_id:           class_id,
-                                                   instance_id:        instance_id, 
-                                                   i_market_hash_name: hash_name.gsub(' ','+') }) ? false : true
+  def item_not_exists?(params)
+    Item.exists?(link: Constant::ITEM_LINK_URL % { class_id:           params[:class_id],
+                                                   instance_id:        params[:instance_id], 
+                                                   i_market_hash_name: params[:hash_name].gsub(' ','+') }) ? false : true
   end
 
   def item_profitability?(price_of_buy, price_of_sell, limit_of_benefit)
