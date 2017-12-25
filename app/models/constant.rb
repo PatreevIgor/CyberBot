@@ -35,5 +35,5 @@ class Constant
                                    '%{class_id}_%{instance_id}/?key=%{your_secret_key}'.freeze
   ITEM_INFORMATION_URL           = 'https://market.dota2.net/api/ItemInfo/'\
                                    '%{class_id}_%{instance_id}/ru/?key=%{your_secret_key}'.freeze
-
+  GET_ORDERS_LOG                 = 'https://market.dota2.net/api/GetOrdersLog/?key=%{your_secret_key}'.freeze
 end

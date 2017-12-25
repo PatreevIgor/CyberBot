@@ -1,22 +1,15 @@
 class HomeController < ApplicationController
-  NOT_ACTUALLY_MAIN_ITEMS_STATUS = 'main_not_actually'.freeze
-  ACTUALLY_MAIN_ITEMS_STATUS     = 'main_actually'.freeze
-  NOT_SALE_ITEMS_STATUS          = 'not sale'.freeze
-  SALE_ITEMS_STATUS              = 'sale on'.freeze
-  MAIN_ITEMS_STATUS              = 'main'.freeze
-  NEW_ITEMS_STATUS               = 'new'.freeze
-
   def index
-    @not_actually_main_items = Item.where(status: NOT_ACTUALLY_MAIN_ITEMS_STATUS)
-    @actually_main_items     = Item.where(status: ACTUALLY_MAIN_ITEMS_STATUS)
-    @main_items              = Item.where(status: MAIN_ITEMS_STATUS)
-    @new_items               = Item.where(status: NEW_ITEMS_STATUS)
+    @not_actually_main_items = Item.where(status: Constant::NOT_ACTUALLY_MAIN_ITEMS_STATUS)
+    @actually_main_items     = Item.where(status: Constant::ACTUALLY_MAIN_ITEMS_STATUS).order("price")
+    @main_items              = Item.where(status: Constant::MAIN_ITEMS_STATUS)
+    @new_items               = Item.where(status: Constant::NEW_ITEMS_STATUS)
     @all_main_items          = @main_items + @actually_main_items + @not_actually_main_items
   end
 
   def inventary
-    @not_sale_items = Item.where(status: NOT_SALE_ITEMS_STATUS)
-    @sale_items     = Item.where(status: SALE_ITEMS_STATUS)
+    @not_sale_items = Item.where(status: Constant::NOT_SALE_ITEMS_STATUS)
+    @sale_items     = Item.where(status: Constant::SALE_ITEMS_STATUS)
   end
 
   def button_update_not_sale_items

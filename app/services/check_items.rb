@@ -32,7 +32,7 @@ module CheckItems
                   price:           params[:current_price],
                   link:            Constant::ITEM_LINK_URL % { class_id:           params[:class_id],
                                                                instance_id:        params[:instance_id], 
-                                                               i_market_hash_name: params[:hash_name] },
+                                                               i_market_hash_name: params[:hash_name].gsub(' ','+') },
                   status:          Constant::NEW_ITEMS_STATUS)
       puts Constant::ITEM_CREATED_TEXT
     else 
