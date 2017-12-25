@@ -41,7 +41,7 @@ module Inventary
                       i_market_price_text: item_attr['i_market_price_text'],
                       link:      Constant::ITEM_LINK_URL % { class_id:           item_attr['i_classid'],
                                                              instance_id:        item_attr['i_instanceid'], 
-                                                             i_market_hash_name: item_attr['i_market_hash_name'] },
+                                                             i_market_hash_name: item_attr['i_market_hash_name'].gsub(' ','+') },
                       status:    Constant::NOT_SALE_ITEMS_STATUS)
         end
       end
@@ -85,7 +85,7 @@ module Inventary
                       link:      Constant::ITEM_LINK_URL % { class_id:           item_attr['i_classid'],
                                                              instance_id:        item_attr['i_instanceid'], 
                                                              i_market_hash_name: item_attr['i_market_hash_name'] },
-                      status:    Constant::NOT_SALE_ITEMS_STATUS)
+                      status:    Constant::SALE_ITEMS_STATUS)
         end
       end
     end

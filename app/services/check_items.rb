@@ -45,7 +45,7 @@ module CheckItems
        params[:current_price].to_f > params[:from_price_input_val].to_i &&
        params[:current_price].to_f < params[:to_price_input_val].to_i   &&
        item_not_exists?(params)                                         &&
-       item_profitability?(price_of_buy(params), price_of_sell(params), 1000)
+       item_profitability?(set_price_of_buy(params), set_price_of_sell(params), 1000)
       true
     else
       false
@@ -64,13 +64,13 @@ module CheckItems
     clean_benefit >= limit_of_benefit ? true : false
   end
 
-  def price_of_buy(params)
+  def set_price_of_buy(params)
     best_offer_price(Constant::BEST_BUY_OFFER_URL % { class_id:        params[:class_id], 
                                                       instance_id:     params[:instance_id], 
                                                       your_secret_key: Rails.application.secrets.your_secret_key })
   end
 
-  def price_of_sell(params)
+  def set_price_of_sell(params)
     best_offer_price(Constant::BEST_SELL_OFFER_URL % { class_id:        params[:class_id], 
                                                        instance_id:     params[:instance_id], 
                                                        your_secret_key: Rails.application.secrets.your_secret_key })

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post :button_re_create_buy_orders
       post :button_remove_ident_items
       post :button_update_status
+      post :button_update_price_bought_items
     end
   end
 end

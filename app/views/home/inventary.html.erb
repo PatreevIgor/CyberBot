@@ -1,3 +1,9 @@
+<%= form_tag(button_update_price_bought_items_home_index_path, method: 'post') do %>
+  <%= submit_tag('UpdatePriceBoughtItems') %>
+<% end %>
+
+<br>
+
 <%= render 'partials/list_not_sale_items.html' %>
 
 <%= form_tag(button_update_not_sale_items_home_index_path, method: 'post') do %>
