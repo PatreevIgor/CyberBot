@@ -15,7 +15,7 @@ module UpdatePriceBoughtItems
                                                  instance_id:        item['instanceid'], 
                                                  i_market_hash_name: item['name'].gsub(' ','+') })
 
-          exist_items_in_db.first.update_attributes(price_of_buy: item['price']) if exist_items_in_db.size == 1
+          exist_items_in_db.first.update_attributes(price_of_buy: item['price']) if exist_items_in_db.size >= 1
         end
       end
     end
@@ -23,14 +23,16 @@ module UpdatePriceBoughtItems
 
   def fill_attr_min_price_of_sell_for_new_bought_items
     Item.where('price_of_buy > ?', 30).each do |item|
-      item.min_price_of_sell = item.price_of_buy + ////////////
+      item.min_price_of_sell = sprintf("%.0f", min_favorable_price(item))
       item.save!
     end
   end
 
+  def min_favorable_price(item)
+    item.price_of_buy / 100 * 110 + 1000
+  end
 
   def bught_items
     Connection.send_request(Constant::GET_ORDERS_LOG_URL % { your_secret_key: Rails.application.secrets.your_secret_key })
   end
-
 end

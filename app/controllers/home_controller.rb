@@ -52,6 +52,7 @@ class HomeController < ApplicationController
 
   def button_update_price_bought_items
     main_object.fill_attr_price_of_buy_for_new_bought_items
+    main_object.fill_attr_min_price_of_sell_for_new_bought_items
 
     redirect_back(fallback_location: root_path)
   end
