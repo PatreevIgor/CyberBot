@@ -12,9 +12,9 @@ class Constant
   ITEM_HASH_HASH_NAME_KEY        = 'hash_name'.freeze
   ITEM_HASH_BEST_OFFER_KEY       = 'best_offer'.freeze
   ITEM_INFO_HASH_MIN_PRICE_KEY   = 'min_price'.freeze
-  HASH_MIN_KEY                        = 'min'.freeze
-  HASH_MAX_KEY                        = 'max'.freeze
-  HASH_AVERAGE_KEY                    = 'average'.freeze
+  HASH_MIN_KEY                   = 'min'.freeze
+  HASH_MAX_KEY                   = 'max'.freeze
+  HASH_AVERAGE_KEY               = 'average'.freeze
 
   COUNT_FOUND_ITEMS_TEXT         = 'Found %{count_item} new items!'.freeze
   ITEM_CREATED_TEXT              = 'Item created!'.freeze
@@ -36,4 +36,9 @@ class Constant
   ITEM_INFORMATION_URL           = 'https://market.dota2.net/api/ItemInfo/'\
                                    '%{class_id}_%{instance_id}/ru/?key=%{your_secret_key}'.freeze
   GET_ORDERS_LOG_URL             = 'https://market.dota2.net/api/GetOrdersLog/?key=%{your_secret_key}'.freeze
+  UPDATE_ORDER_URL               = 'https://market.dota2.net/api/UpdateOrder/'\
+                                   '%{class_id}/%{instance_id}/%{price}/?key=%{your_secret_key}'.freeze
+  SET_PRICE_URL                  = 'https://market.dota2.net/api/SetPrice/%{ui_id}/%{price}/?key=%{your_secret_key}'.freeze
+  REMOVE_ALL_URL                 = 'https://market.dota2.net/api/RemoveAll/?key=%{your_secret_key}'.freeze
+  UPDATE_INVENTARY_URL           = 'https://market.dota2.net/api/UpdateInventory/?key=%{your_secret_key}'.freeze
 end

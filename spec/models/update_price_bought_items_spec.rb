@@ -25,5 +25,7 @@ RSpec.describe Item, :type => :model do
                                                     "image"=>"https://cdn.dota2.net/item/Huntling/150.png", 
                                                     "price"=>5600, "comment"=>nil, "executed"=>1513543670}
                                                   ]} }
-  let(:var) {  }
+  let(:update_order) { 
+    {"error"=>"Данная заявка на покупку не найдена в базе"}
+   }
 end

@@ -13,11 +13,11 @@ class HomeController < ApplicationController
   end
 
   def button_update_not_sale_items
-    main_object.update_not_sale_items
+    main_object.update_not_sale_items_in_my_db
   end
 
   def button_update_sale_items
-    main_object.update_sale_items
+    main_object.update_sale_items_in_my_db
   end
 
   def button_get_any_items
@@ -51,8 +51,7 @@ class HomeController < ApplicationController
   end
 
   def button_update_price_bought_items
-    main_object.fill_attr_price_of_buy_for_new_bought_items
-    main_object.fill_attr_min_price_of_sell_for_new_bought_items
+    main_object.update_price_bought_items
 
     redirect_back(fallback_location: root_path)
   end

@@ -9,4 +9,16 @@ namespace :filling_fields do
       item.save
     end
   end
+
+  #rake filling_fields:clean_all_29_99
+  task :clean_all_29_99 => :environment do
+    Item.where(price_of_buy: 29.99).each do |item|
+      item.price_of_buy = nil
+      item.save
+    end
+  end
 end
+
+
+
+

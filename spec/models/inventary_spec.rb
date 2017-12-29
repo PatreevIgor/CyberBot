@@ -1,0 +1,71 @@
+require "rails_helper" 
+
+RSpec.describe Item, :type => :model do
+  let(:get_inv) { 
+
+                  {"ok"=>true, 
+                   "data"=>[{"ui_id"=>"new_238675495_1625991177", 
+                             "i_market_hash_name"=>"Inscribed Ruling Staff of the Priest Kings", 
+                             "i_market_name"=>"Inscribed Ruling Staff of the Priest Kings", 
+                             "i_name"=>"Inscribed Ruling Staff of the Priest Kings", 
+                             "i_name_color"=>"CF6A32", 
+                             "i_rarity"=>"Uncommon", 
+                             "i_descriptions"=>[{"type"=>"html", 
+                                                 "value"=>"Используется: Chen"}, 
+                                                {"type"=>"html", "value"=>" "}, 
+                                                {"type"=>"html", "value"=>"Gemmed Armor of the Priest Kings", "color"=>"9da1a9"}, 
+                                                {"type"=>"html", "value"=>"Gemmed Pauldrons of the Priest Kings", "color"=>"6c7075"}, 
+                                                {"type"=>"html", "value"=>"Gemmed Mitre of the Priest Kings", "color"=>"6c7075"}, 
+                                                {"type"=>"html", "value"=>"Gemmed Bracers of the Priest Kings", "color"=>"6c7075"}, 
+                                                {"type"=>"html", "value"=>"Scarab Pendant of the Priest Kings", "color"=>"6c7075"}, 
+                                                {"type"=>"html", "value"=>"Ruling Staff of the Priest Kings", "color"=>"6c7075"}, 
+                                                {"type"=>"html", "value"=>"Sanurok the Ever Able", "color"=>"6c7075"}, 
+                                                {"type"=>"html", "value"=>"Он милосерден. Предлагая смерть как его милость,  этим священным посохом он свершает её."}, 
+                                                {"type"=>"html", "value"=>"<div style=\"white-space: nowrap; margin: 10px\"><div style=\"white-space: nowrap; padding: 3px;\"><div style=\"width: 60px; height: 32px; vertical-align: top; display: inline-block;\"><div style=\"position: relative; width: 48px; height: 32px; vertical-align: top; display: inline-block; border: 2px solid rgb(255, 255, 255);\"><div style=\"position: absolute; width: 48px; height: 32px; vertical-align: top; display: inline-block; background-size: contain; background-image: url(https://steamcdn-a.akamaihd.net/apps/570/icons/econ/sockets/gem_stat.30d7935c1f0a1b9e8e28c691c2bd28f7d5f471bc.png)\"></div></div></div><div style=\"vertical-align: top; display: inline-block; margin-left: 12px padding: 2px\"><span style=\"font-size: 18px; white-space: normal; color: rgb(255, 255, 255)\">Разрушено казарм: 0</span><br><span style=\"font-size: 12px\">Руна</span></div></div></div>"}], 
+                                                 "ui_status"=>1, 
+                                                 "he_name"=>"Chen", 
+                                                 "ui_price"=>0, 
+                                                 "min_price"=>0, 
+                                                 "ui_price_text"=>false, 
+                                                 "min_price_text"=>false, 
+                                                 "i_classid"=>"238675495", 
+                                                 "i_instanceid"=>"253546295", 
+                                                 "ui_new"=>true, "position"=>0, 
+                                                 "wear"=>false, "tradable"=>1, 
+                                                 "i_market_price"=>38.35, 
+                                                 "i_market_price_text"=>"38.35<small></small>"},
+
+                            {"ui_id"=>"new_230131950_57943523", 
+                             "i_market_hash_name"=>"Artificer's Chisel", 
+                             "i_market_name"=>"Artificer's Chisel", 
+                             "i_name"=>"Artificer's Chisel", 
+                             "i_name_color"=>"D2D2D2", 
+                             "i_rarity"=>"Uncommon", 
+                             "i_descriptions"=>[{"type"=>"html", 
+                                                 "value"=>"Зачарованная стамеска для создания гнезд под любые самоцветы, кроме потусторонних и призматических.\r\nЭтот инструмент можно применить на странице информации о предмете. Откройте арсенал и дважды нажмите на нужный предмет, или же нажмите на него правой кнопкой мыши и выберите пункт «Информация».\r\nПосле использования этот инструмент исчезнет."}], 
+                                                 "ui_status"=>1, 
+                                                 "he_name"=>"Другие", 
+                                                 "ui_price"=>0, 
+                                                 "min_price"=>0, 
+                                                 "ui_price_text"=>false, 
+                                                 "min_price_text"=>false, 
+                                                 "i_classid"=>"230131950", 
+                                                 "i_instanceid"=>"57943523", 
+                                                 "ui_new"=>true, 
+                                                 "position"=>0, 
+                                                 "wear"=>false, 
+                                                 "tradable"=>1, 
+                                                 "i_market_price"=>61.58, 
+                                                 "i_market_price_text"=>"61.58<small></small>"}]}
+
+   }
+  let(:set_price) { 
+                    {"result"=>1, 
+                     "item_id"=>121347354, 
+                     "price"=>29.97, 
+                     "price_text"=>"29.97<small></small>", 
+                     "status"=>"1", 
+                     "position"=>1, 
+                     "success"=>true}
+   }
+end
