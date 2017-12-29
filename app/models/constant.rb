@@ -18,6 +18,11 @@ class Constant
 
   COUNT_FOUND_ITEMS_TEXT         = 'Found %{count_item} new items!'.freeze
   ITEM_CREATED_TEXT              = 'Item created!'.freeze
+  REMOVED_ALL_TRADES_TEXT        = 'Removed all trades!'.freeze
+  WAIT_15_SEK_TEXT               = 'Wait 15 sec!'.freeze
+  NOT_SALE_ITEMS_UPDATED_TEXT    = 'Items (not sale) in my db updated!'.freeze
+  FINISHED_FILLING_TEXT          = 'Finished filling price_of_buy fields!'.freeze
+  PUT_UP_ALL_BOUGHT_ITEMS_TEXT   = 'Put up all bought items!'.freeze
 
   LAST_50_PURCHASES_URL          = 'https://market.dota2.net/history/json/'.freeze
   BEST_BUY_OFFER_URL             = 'https://market.dota2.net/api/BestBuyOffer/'\

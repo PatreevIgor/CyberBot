@@ -1,23 +1,21 @@
 module UpdatePriceBoughtItems
   def update_price_bought_items
     remove_all_trades
-    puts 'Removed all trades!'
+    puts Constant::REMOVED_ALL_TRADES_TEXT
 
     update_inventary
-    puts 'Wait 15 sec!'
+    puts Constant::WAIT_15_SEK_TEXT
     sleep 15
 
     update_not_sale_items_in_my_db
-    puts 'Items (not sale) in my db updated!'
+    puts Constant::NOT_SALE_ITEMS_UPDATED_TEXT
 
     fill_attr_price_of_buy_for_new_bought_items
-    puts 'Finished filling price_of_buy fields!'
-
     fill_attr_min_price_of_sell_for_new_bought_items
-    puts 'Finished filling min_price_of_sell fields!'
-    
+    puts Constant::FINISHED_FILLING_TEXT
+
     put_up_for_sale_bought_items
-    puts 'Put up all bought items!'
+    puts Constant::PUT_UP_ALL_BOUGHT_ITEMS_TEXT
   end
 
 private
@@ -60,15 +58,12 @@ end
   end
 
   def put_up_for_sale_bought_items
-    all_inventary_items = Item.where(status: Constant::NOT_SALE_ITEMS_STATUS)
+    all_inventary_items = Item.where(status: Constant::NOT_SALE_ITEMS_STATUS).order('i_name')
     all_inventary_items.each do |item|
       if item.price_of_buy == nil
         put_up_item_with_29_99(item)
-        puts 'Put up items with price - 29.99'
       elsif item.price_of_buy != nil
-        binding.pry
         put_up_items_with_appropriate_price(item)
-        puts "Put up items with appropriate price - #{appropriate_price(item)}"
       end
     end
   end
@@ -80,10 +75,12 @@ end
   end
 
   def put_up_items_with_appropriate_price(item)
-    if min_price({ class_id: item.class_id, instance_id: item.instance_id }) != 1 &&
-       max_price({ class_id: item.class_id, instance_id: item.instance_id }) != 2
+    if min_price({ class_id: item.class_id, instance_id: item.instance_id }) == 1 &&
+       max_price({ class_id: item.class_id, instance_id: item.instance_id }) == 2
       put_up_item_for_sale(item, min_favorable_price_for_only_items(item))
-    else 
+    elsif item_informations(item.class_id, item.instance_id)[Constant::ITEM_INFO_HASH_MIN_PRICE_KEY] == -1
+      put_up_item_for_sale(item, max_price({ class_id: item.class_id, instance_id: item.instance_id }) * 100)
+    else
       put_up_item_for_sale(item, appropriate_price(item))
     end
   end
