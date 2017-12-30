@@ -1,21 +1,18 @@
-<h1>Listing sale Items</h1>
 <table>
   <thead>
     <tr>
       <th>i_name</th>
       <th>ui_price</th>
       <th>link</th>
-      <th>price_of_buy</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @sale_items.each do |item| %>
+    <% @expensive_items.each do |item| %>
       <tr>
         <td><%= item.i_name %></td>
         <td><%= item.ui_price %></td>
         <td><%= link_to 'Link', item.link %></td>
-        <td><%= item.price_of_buy %></td>
       </tr>
     <% end %>
   </tbody>

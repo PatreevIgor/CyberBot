@@ -32,7 +32,6 @@ end
   def fill_attr_price_of_buy_for_new_bought_items
       bought_items.each do |success_or_log, items|
       if success_or_log == 'log'
-
         items.each do |item|
           exist_in_db_items = Item.where(link: Constant::ITEM_LINK_URL % { 
                                                           class_id:           item['classid'],
@@ -58,7 +57,7 @@ end
   end
 
   def put_up_for_sale_bought_items
-    all_inventary_items = Item.where(status: Constant::NOT_SALE_ITEMS_STATUS).order('i_name')
+    all_inventary_items = Item.where(status: Constant::NOT_SALE_ITEMS_STATUS).order('price_of_buy')
     all_inventary_items.each do |item|
       if item.price_of_buy == nil
         put_up_item_with_29_99(item)
@@ -75,14 +74,22 @@ end
   end
 
   def put_up_items_with_appropriate_price(item)
-    if min_price({ class_id: item.class_id, instance_id: item.instance_id }) == 1 &&
-       max_price({ class_id: item.class_id, instance_id: item.instance_id }) == 2
+    if item_never_sold?(item)
       put_up_item_for_sale(item, min_favorable_price_for_only_items(item))
-    elsif item_informations(item.class_id, item.instance_id)[Constant::ITEM_INFO_HASH_MIN_PRICE_KEY] == -1
+    elsif order_other_user_not_exist?(item)
       put_up_item_for_sale(item, max_price({ class_id: item.class_id, instance_id: item.instance_id }) * 100)
     else
       put_up_item_for_sale(item, appropriate_price(item))
     end
+  end
+
+  def item_never_sold?(item)
+    true if min_price({ class_id: item.class_id, instance_id: item.instance_id }) == 1 &&
+            max_price({ class_id: item.class_id, instance_id: item.instance_id }) == 2
+  end
+
+  def order_other_user_not_exist?(item)
+    true if (item_informations(item.class_id, item.instance_id)[Constant::ITEM_INFO_HASH_MIN_PRICE_KEY] == -1)
   end
 
   def put_up_item_for_sale(item, price)
