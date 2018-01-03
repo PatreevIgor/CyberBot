@@ -11,7 +11,7 @@ unicorn_conf = "/etc/unicorn/#{ application }.#{ login }.rb"
 unicorn_pid = "/var/run/unicorn/#{ $user }/#{ application }.#{ login }.pid"
 unicorn_start_cmd = "(cd #{ deploy_to }/current; rvm use #{ rvm_ruby_string } do bundle exec unicorn_rails -Dc #{ unicorn_conf })"
 
-set :rvm_ruby_version, '2.4.1'
+set :rvm_ruby_version, '2.4.0'
 set :keep_releases, 3
 
 set :application, application
@@ -36,8 +36,10 @@ set :deploy_to, deploy_to
 set :pty, true
 
 # Default value for :linked_files is []
-# set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
+# set :linked_files, fetch(:linked_files, []).push('config/secrets.yml')
 set :linked_files, %w{config/secrets.yml}
+# set :linked_files, %w{config/database.yml config/secrets.yml config/nginx.conf}
+# set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for linked_dirs is []
 # set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')

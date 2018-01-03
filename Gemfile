@@ -22,6 +22,7 @@ gem 'capistrano-bundler'
 gem 'capistrano-rvm'
 gem 'unicorn' 
 gem 'mysql2', '~> 0.3.18'
+# gem 'sqlite3'
 
 group :test do
   gem 'shoulda-matchers', '~> 3.1'
