@@ -1,22 +1,19 @@
 <table>
   <tbody>
-    <%= form_tag(button_get_any_items_home_index_path, method: "post") do %>
+    <%= form_tag(button_find_new_items_home_index_path, method: "post") do %>
       <tr>
         <th><%= label_tag(:count_item, "Count item:") %>
         <%= text_field_tag(:count_item) %><th>
-
+        &nbsp;
         <th><%= label_tag(:from_price, "From price:") %>
         <%= text_field_tag(:from_price) %><th>
-        
+        &nbsp;
         <th><%= label_tag(:to_price,   "To price:") %>
         <%= text_field_tag(:to_price) %><th>
-        
-        <th><%= label_tag(:coeff_val,  "Coefficient current state:") %>
-        <%= text_field_tag(:coeff_val) %><th>
       </tr>
   </tbody>
 </table>
       <br>
-      <%= submit_tag("Get any items") %>
+      <%= submit_tag("Find new items") %>
     <% end %>
 

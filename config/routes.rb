@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   resources :home do
     collection do
       post :check_50_last_sales
-      post :button_get_any_items
+      post :button_find_new_items
       post :button_update_sale_items
       post :button_change_status_new_to_main
       post :button_re_create_buy_orders

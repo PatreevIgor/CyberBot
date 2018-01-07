@@ -21,8 +21,8 @@ class HomeController < ApplicationController
     end
   end
 
-  def button_get_any_items
-    main_object.get_any_items(params[:from_price], params[:to_price], params[:coeff_val], params[:count_item])
+  def button_find_new_items
+    main_object.find_new_items(params[:from_price], params[:to_price], params[:count_item])
 
     respond_to do |format|
       format.html { redirect_to home_index_url, notice: 'Items found!' }
