@@ -38,6 +38,12 @@ module UpdateStatus
     end
     sprintf("%.2f", coefficient).to_f
   end
+  
+  def item_profitability?(price_of_buy, price_of_sell, limit_of_benefit)
+    clean_benefit = price_of_sell - price_of_buy - (price_of_sell / 100 * 10)
+
+    clean_benefit >= limit_of_benefit ? true : false
+  end
 
   def params_for_coeff_curr_st_of_pr(item)
     {:class_id      => item.class_id,
