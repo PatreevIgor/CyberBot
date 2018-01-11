@@ -4,7 +4,6 @@ module UpdateStatus
                      Item.where(status:Constant::ACTUALLY_MAIN_ITEMS_STATUS) +
                      Item.where(status:Constant::NOT_ACTUALLY_MAIN_ITEMS_STATUS)
     all_main_items.each do |item|
-      binding.pry
       if coefficient_current_state_of_prices(params_for_coeff_curr_st_of_pr(item)) > 1 &&
          item_profitability?(best_offer_price(Constant::BEST_BUY_OFFER_URL % { 
                                                 class_id:        item.class_id, 
@@ -17,14 +16,14 @@ module UpdateStatus
                              1000) # 1000 = 10 RUB
         item.status                  = Constant::ACTUALLY_MAIN_ITEMS_STATUS
         item.price                   = current_price(item.class_id, item.instance_id)
-        item.amount_of_profitability = amount_of_profitability(best_offer_price(Constant::BEST_BUY_OFFER_URL % { 
-                                                                 class_id:        item.class_id, 
-                                                                 instance_id:     item.instance_id,
-                                                                 your_secret_key: Rails.application.secrets.your_secret_key}),
-                                                               best_offer_price(Constant::BEST_SELL_OFFER_URL % { 
-                                                                 class_id:        item.class_id, 
-                                                                 instance_id:     item.instance_id,
-                                                                 your_secret_key: Rails.application.secrets.your_secret_key}))
+        # item.amount_of_profitability = amount_of_profitability(best_offer_price(Constant::BEST_BUY_OFFER_URL % { 
+        #                                                          class_id:        item.class_id, 
+        #                                                          instance_id:     item.instance_id,
+        #                                                          your_secret_key: Rails.application.secrets.your_secret_key}),
+        #                                                        best_offer_price(Constant::BEST_SELL_OFFER_URL % { 
+        #                                                          class_id:        item.class_id, 
+        #                                                          instance_id:     item.instance_id,
+        #                                                          your_secret_key: Rails.application.secrets.your_secret_key}))
         item.save!
       else
         if item.status == Constant::ACTUALLY_MAIN_ITEMS_STATUS or item.status == Constant::MAIN_ITEMS_STATUS
