@@ -17,7 +17,7 @@ module UpdateStatus
         item.status                  = Constant::ACTUALLY_MAIN_ITEMS_STATUS
         item.price                   = current_price(item.class_id, item.instance_id)
         # item.amount_of_profitability = amount_of_profitability(best_offer_price(Constant::BEST_BUY_OFFER_URL % { 
-        #                                                          class_id:        item.class_id, 
+        #                                                          claz ss_id:        item.class_id, 
         #                                                          instance_id:     item.instance_id,
         #                                                          your_secret_key: Rails.application.secrets.your_secret_key}),
         #                                                        best_offer_price(Constant::BEST_SELL_OFFER_URL % { 
@@ -69,6 +69,7 @@ module UpdateStatus
   end
 
   def item_informations(class_id, instance_id)
+    sleep 0.2
     Connection.send_request(Constant::ITEM_INFORMATION_URL % {
                               class_id:        class_id, 
                               instance_id:     instance_id, 
@@ -94,6 +95,7 @@ module UpdateStatus
   end
 
   def get_hash_min_middle_max_prices(params)
+    sleep 0.2
     url = Constant::ITEM_HISTORY_URL % { class_id:        params[:class_id].to_s,
                                          instance_id:     params[:instance_id].to_s,
                                          your_secret_key: Rails.application.secrets.your_secret_key}

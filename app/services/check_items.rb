@@ -57,18 +57,21 @@ module CheckItems
   end
 
   def set_price_of_buy(params)
+    sleep 0.2
     best_offer_price(Constant::BEST_BUY_OFFER_URL % { class_id:        params[:class_id], 
                                                       instance_id:     params[:instance_id], 
                                                       your_secret_key: Rails.application.secrets.your_secret_key })
   end
 
   def set_price_of_sell(params)
+    sleep 0.2
     best_offer_price(Constant::BEST_SELL_OFFER_URL % { class_id:        params[:class_id], 
                                                        instance_id:     params[:instance_id], 
                                                        your_secret_key: Rails.application.secrets.your_secret_key })
   end
 
   def best_offer_price(url)
+    sleep 0.2
     response = Connection.send_request(url)
     response[Constant::ITEM_HASH_BEST_OFFER_KEY].to_i
   end
